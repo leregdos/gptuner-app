@@ -16,39 +16,44 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.getTheme().backgroundColor,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(FontAwesomeIcons.bars),
-          onPressed: _onIconPressed,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: AppTheme.getTheme().backgroundColor,
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(FontAwesomeIcons.bars),
+            onPressed: _onIconPressed,
+          ),
+          // title: const Text(
+          //   "Welcome to GPTuner",
+          //   textAlign: TextAlign.center,
+          // ),
+          elevation: 0.0, // This removes the shadow below the AppBar.
+          backgroundColor:
+              Colors.transparent, // Makes the AppBar background transparent.
         ),
-        // title: const Text(
-        //   "Welcome to GPTuner",
-        //   textAlign: TextAlign.center,
-        // ),
-        elevation: 0.0, // This removes the shadow below the AppBar.
-        backgroundColor:
-            Colors.transparent, // Makes the AppBar background transparent.
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            Text(
-              "Welcome to GPTuner",
-              style: AppTheme.getTheme().textTheme.headline6,
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            Expanded(child: _buildRoundedCardButton("Submit Prompt", 0)),
-            const SizedBox(height: 20), // For spacing
-            Expanded(child: _buildRoundedCardButton("Submit Demonstration", 1)),
-            const SizedBox(height: 20), // For spacing
-            Expanded(child: _buildRoundedCardButton("Validate Submissions", 1)),
-            const Spacer(),
-          ],
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              Text(
+                "Welcome to GPTuner",
+                style: AppTheme.getTheme().textTheme.headline6,
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              Expanded(child: _buildRoundedCardButton("Submit Prompt", 0)),
+              const SizedBox(height: 20), // For spacing
+              Expanded(
+                  child: _buildRoundedCardButton("Submit Demonstration", 1)),
+              const SizedBox(height: 20), // For spacing
+              Expanded(
+                  child: _buildRoundedCardButton("Validate Submissions", 1)),
+              const Spacer(),
+            ],
+          ),
         ),
       ),
     );
