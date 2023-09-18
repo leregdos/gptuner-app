@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gptuner/providers/auth_state.dart';
 import 'package:gptuner/shared/utils/functions.dart';
 import 'package:gptuner/theme/app_theme.dart';
+import 'package:provider/provider.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -24,6 +26,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authState = Provider.of<AuthState>(context, listen: false);
     return Scaffold(
       backgroundColor: AppTheme.getTheme().backgroundColor,
       body: Center(

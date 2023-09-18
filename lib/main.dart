@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:gptuner/features/home/home_screen.dart';
 import 'package:gptuner/features/login/login_screen.dart';
 import 'package:gptuner/features/signup/signup_screen.dart';
+import 'package:gptuner/providers/auth_state.dart';
 import 'package:gptuner/shared/utils/constants.dart';
 import 'package:gptuner/theme/app_theme.dart';
+import 'package:provider/provider.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) => AuthState(), child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
