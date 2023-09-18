@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gptuner/features/home/home_screen.dart';
 import 'package:gptuner/features/login/login_screen.dart';
 import 'package:gptuner/features/signup/signup_screen.dart';
 import 'package:gptuner/shared/utils/constants.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
 
 //routes for different screen
 var routes = <String, WidgetBuilder>{
-  Routes.loginScreen: (BuildContext context) => LoginScreen(),
-  Routes.signupScreen: (BuildContext context) => SignUpScreen(),
+  Routes.loginScreen: (BuildContext context) => const LoginScreen(),
+  Routes.signupScreen: (BuildContext context) => const SignupScreen(),
+  Routes.homeScreen: (BuildContext context) => const HomeScreen(),
 };
