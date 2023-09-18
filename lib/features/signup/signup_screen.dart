@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gptuner/shared/utils/constants.dart';
 import 'package:gptuner/shared/utils/functions.dart';
 import 'package:gptuner/theme/app_theme.dart';
 
@@ -122,6 +120,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           if (val != _passwordController.text) {
                             return "Passwords do not match";
                           }
+                          return null;
                         },
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         controller: _confirmPasswordController,
