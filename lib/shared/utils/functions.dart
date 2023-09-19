@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gptuner/main.dart';
 import 'package:gptuner/providers/auth_state.dart';
+import 'package:gptuner/shared/utils/constants.dart';
 import 'package:gptuner/theme/app_theme.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
@@ -86,25 +87,19 @@ Widget buildSidebar(AuthState state, BuildContext context) {
             leading: const Icon(Icons.account_circle, color: Colors.white),
             title: Text('Profile', style: AppTheme.getTheme().textTheme.button),
             onTap: () {
-              Navigator.of(context).pop(); // Close the drawer
-              // Navigator.of(context)
-              //     .pushNamed('/accountDetails'); // Push to your route
+              Navigator.pushNamed(context, Routes.profileScreen);
             },
           ),
           ListTile(
             leading: const Icon(Icons.settings, color: Colors.white),
             title:
                 Text('Settings', style: AppTheme.getTheme().textTheme.button),
-            onTap: () {
-              Navigator.of(context).pop(); // Close the drawer
-            },
+            onTap: () {},
           ),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.white),
             title: Text('Log Out', style: AppTheme.getTheme().textTheme.button),
-            onTap: () {
-              Navigator.of(context).pop(); // Close the drawer
-            },
+            onTap: () {},
           ),
         ],
       ),

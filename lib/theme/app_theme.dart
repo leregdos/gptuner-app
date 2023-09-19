@@ -20,11 +20,11 @@ class AppTheme {
           fontWeight: FontWeight.w500,
           letterSpacing: -0.333),
       headline1: base.headline1!.copyWith(
-          fontFamily: fontName1,
-          fontSize: 16,
-          color: Colors.black87,
-          fontWeight: FontWeight
-              .w500), // Since we don't use headline1 in our code, maybe we can make it subtitle 1, but bold?
+          fontFamily: fontName2,
+          fontSize: 20,
+          color: const Color(0xFFFFFFFF),
+          letterSpacing: -0.333,
+          fontWeight: FontWeight.w500),
       headline2: base.headline2!.copyWith(
           fontFamily: fontName2, fontSize: 48, fontWeight: FontWeight.w500),
       headline3: base.headline3!.copyWith(
@@ -63,7 +63,7 @@ class AppTheme {
           color: Colors.grey,
           fontWeight: FontWeight.w600,
           letterSpacing: -0.333),
-      overline: base.overline!.copyWith(fontFamily: fontName1),
+      overline: base.overline!.copyWith(fontFamily: fontName2),
     );
   }
 

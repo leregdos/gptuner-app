@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authState = Provider.of<AuthState>(context, listen: false);
+    final state = Provider.of<AuthState>(context, listen: false);
     return Scaffold(
       backgroundColor: AppTheme.getTheme().backgroundColor,
       body: Stack(
@@ -172,13 +172,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               setState(() {
                                 _isLoading = true;
                               });
-                              await authState.login(_emailController.text,
+                              await state.login(_emailController.text,
                                   _passwordController.text);
                               setState(() {
                                 _isLoading = false;
                               });
                               if (!mounted) return;
-                              if (authState.isAuthenticated) {
+                              if (state.isAuthenticated) {
                                 Navigator.pushNamed(context, Routes.homeScreen);
                               }
                             }

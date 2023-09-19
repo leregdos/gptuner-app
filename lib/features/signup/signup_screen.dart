@@ -30,7 +30,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authState = Provider.of<AuthState>(context, listen: false);
+    final state = Provider.of<AuthState>(context, listen: false);
     return WillPopScope(
       onWillPop: () async {
         if (_isLoading) {
@@ -221,7 +221,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 setState(() {
                                   _isLoading = true;
                                 });
-                                await authState.signup(
+                                await state.signup(
                                     _emailController.text,
                                     _passwordController.text,
                                     _nameController.text,
@@ -230,7 +230,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   _isLoading = false;
                                 });
                                 if (!mounted) return;
-                                if (authState.isAuthenticated) {
+                                if (state.isAuthenticated) {
                                   Navigator.pushNamed(
                                       context, Routes.homeScreen);
                                 }
