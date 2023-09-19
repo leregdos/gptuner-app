@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gptuner/main.dart';
+import 'package:gptuner/providers/auth_state.dart';
+import 'package:gptuner/theme/app_theme.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -60,4 +62,52 @@ void showSnackbar(
   messenger.currentState!
     ..clearSnackBars()
     ..showSnackBar(snackBar);
+}
+
+Widget buildSidebar(AuthState state, BuildContext context) {
+  return Drawer(
+    child: Container(
+      color: const Color(0xFF8AA1A9), // Black-greyish color
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          DrawerHeader(
+            decoration: const BoxDecoration(
+              color: Color(0xFF8AA1A9),
+            ),
+            child: Center(
+              child: Text(
+                'Menu',
+                style: AppTheme.getTheme().textTheme.headline5,
+              ),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.account_circle, color: Colors.white),
+            title: Text('Profile', style: AppTheme.getTheme().textTheme.button),
+            onTap: () {
+              Navigator.of(context).pop(); // Close the drawer
+              // Navigator.of(context)
+              //     .pushNamed('/accountDetails'); // Push to your route
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.settings, color: Colors.white),
+            title:
+                Text('Settings', style: AppTheme.getTheme().textTheme.button),
+            onTap: () {
+              Navigator.of(context).pop(); // Close the drawer
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout, color: Colors.white),
+            title: Text('Log Out', style: AppTheme.getTheme().textTheme.button),
+            onTap: () {
+              Navigator.of(context).pop(); // Close the drawer
+            },
+          ),
+        ],
+      ),
+    ),
+  );
 }

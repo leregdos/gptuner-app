@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gptuner/providers/auth_state.dart';
+import 'package:gptuner/shared/utils/functions.dart';
 import 'package:gptuner/theme/app_theme.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -9,21 +12,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  void _onIconPressed() {
-    // Placeholder function for your action
-    print("Icon pressed!");
+  void _openSidebar(BuildContext context) {
+    Scaffold.of(context).openDrawer();
   }
 
   @override
   Widget build(BuildContext context) {
+    final state = Provider.of<AuthState>(context, listen: false);
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
+        drawer: buildSidebar(state, context),
         backgroundColor: AppTheme.getTheme().backgroundColor,
         appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(FontAwesomeIcons.bars),
-            onPressed: _onIconPressed,
+          leading: Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(FontAwesomeIcons.bars),
+              onPressed: () => _openSidebar(context),
+            ),
           ),
           elevation: 0.0, // This removes the shadow below the AppBar.
           backgroundColor:
