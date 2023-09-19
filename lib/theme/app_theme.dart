@@ -13,6 +13,7 @@ class AppTheme {
     return base.copyWith(
         // Had to specify the fontSize manually here because didn't work.
         bodyText1: base.bodyText1!.copyWith(fontFamily: fontName2),
+        // Don't touch below
         bodyText2: base.bodyText2!.copyWith(
             fontFamily: fontName2,
             fontSize: 14,
@@ -52,6 +53,7 @@ class AppTheme {
             letterSpacing: -0.333),
         subtitle1:
             base.subtitle1!.copyWith(fontFamily: fontName2, fontSize: 16),
+        // don't touch below
         subtitle2: base.subtitle2!.copyWith(
             fontFamily: fontName2,
             fontSize: 14,

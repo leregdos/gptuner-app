@@ -98,6 +98,7 @@ class AuthState with ChangeNotifier {
         _token = response.headers['set-cookie']!.split(';')[0].substring(4);
         _expiryDate = parseJWTExpiry(
             response.headers['set-cookie']!.split(';')[2].substring(9));
+        await _storeTokenAndExpiryDate(_token!, _expiryDate!);
       }
       if (jsonDecode(response.body)["user"] != null) {
         user = User.fromJson(jsonDecode(response.body)['user']);
@@ -119,7 +120,6 @@ class AuthState with ChangeNotifier {
             backgroundColor: AppTheme.getTheme().errorColor);
       }
     }
-    await _storeTokenAndExpiryDate(_token!, _expiryDate!);
     notifyListeners();
   }
 
@@ -140,6 +140,7 @@ class AuthState with ChangeNotifier {
         _token = response.headers['set-cookie']!.split(';')[0].substring(4);
         _expiryDate = parseJWTExpiry(
             response.headers['set-cookie']!.split(';')[2].substring(9));
+        await _storeTokenAndExpiryDate(_token!, _expiryDate!);
       }
       if (jsonDecode(response.body)["user"] != null) {
         user = User.fromJson(jsonDecode(response.body)['user']);
@@ -151,8 +152,6 @@ class AuthState with ChangeNotifier {
       showSnackbar("There has been a server error. Please try again later.",
           backgroundColor: AppTheme.getTheme().errorColor);
     }
-
-    await _storeTokenAndExpiryDate(_token!, _expiryDate!);
     notifyListeners();
   }
 
