@@ -139,7 +139,7 @@ class AuthState with ChangeNotifier {
   Future<void> logout() async {
     _token = null;
     _expiryDate = null;
-    await _removeTokenAndExpiryDate();
+    // await _removeTokenAndExpiryDate();
     notifyListeners();
   }
 }

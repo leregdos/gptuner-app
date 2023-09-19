@@ -56,13 +56,70 @@ void showSnackbar(
       label: labelMessage,
       textColor: textColor,
       onPressed: () {
-        messenger.currentState!..removeCurrentSnackBar();
+        messenger.currentState!.removeCurrentSnackBar();
       },
     ),
   );
   messenger.currentState!
     ..clearSnackBars()
     ..showSnackBar(snackBar);
+}
+
+void _showLogoutConfirmation(BuildContext parentContext, AuthState state) {
+  showDialog(
+    context: parentContext,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Center(
+            child: Text('Log Out',
+                style: AppTheme.getTheme().textTheme.headline3)),
+        content: Text('Are you sure you want to log out?',
+            style: AppTheme.getTheme().textTheme.subtitle1),
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: TextButton(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Yes',
+                        style: AppTheme.getTheme().textTheme.bodyText2),
+                  ),
+                  onPressed: () {
+                    state.logout().then((_) {
+                      if (Navigator.canPop(context)) {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            Routes.loginScreen,
+                            (Route<dynamic> route) => false);
+                      }
+                    });
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: TextButton(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('No',
+                        style: AppTheme.getTheme().textTheme.bodyText2),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+      );
+    },
+  );
 }
 
 Widget buildSidebar(AuthState state, BuildContext context) {
@@ -99,7 +156,9 @@ Widget buildSidebar(AuthState state, BuildContext context) {
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.white),
             title: Text('Log Out', style: AppTheme.getTheme().textTheme.button),
-            onTap: () {},
+            onTap: () {
+              _showLogoutConfirmation(context, state);
+            },
           ),
         ],
       ),
