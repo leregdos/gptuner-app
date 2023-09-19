@@ -11,69 +11,69 @@ class AppTheme {
         "Poppins"; // used for intro screen heading and subheading
 
     return base.copyWith(
-        // Had to specify the fontSize manually here because didn't work.
-        bodyText1: base.bodyText1!.copyWith(fontFamily: fontName2),
-        // Don't touch below
-        bodyText2: base.bodyText2!.copyWith(
-            fontFamily: fontName2,
-            fontSize: 14,
-            color: const Color(0xFF73E7E0),
-            fontWeight: FontWeight.w500,
-            letterSpacing: -0.333),
-        headline1: base.headline1!.copyWith(
-            fontFamily: fontName2,
-            fontSize: 20,
-            color: const Color(0xFFFFFFFF),
-            letterSpacing: -0.333,
-            fontWeight: FontWeight.w500),
-        headline2: base.headline2!.copyWith(
-            fontFamily: fontName2, fontSize: 48, fontWeight: FontWeight.w500),
-        headline3: base.headline3!.copyWith(
-            fontFamily: fontName2,
-            fontSize: 20,
-            color: Colors.black87,
-            fontWeight: FontWeight.w600,
-            letterSpacing: -0.333),
-        headline4: base.headline4!.copyWith(
+      // Had to specify the fontSize manually here because didn't work.
+      bodyText1: base.bodyText1!.copyWith(fontFamily: fontName2),
+      // Don't touch below
+      bodyText2: base.bodyText2!.copyWith(
           fontFamily: fontName2,
-          fontSize: 15,
-          letterSpacing: -0.333,
+          fontSize: 14,
+          color: const Color(0xFF73E7E0),
           fontWeight: FontWeight.w500,
-        ),
-        headline5: base.headline5!.copyWith(
-            fontFamily: fontName2,
-            fontSize: 20,
-            color: const Color(0xFFFFFFFF),
-            fontWeight: FontWeight.w600,
-            letterSpacing: -0.333),
-        headline6: base.headline6!.copyWith(
-            fontFamily: fontName2,
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-            letterSpacing: -0.333),
-        subtitle1:
-            base.subtitle1!.copyWith(fontFamily: fontName2, fontSize: 16),
-        // don't touch below
-        subtitle2: base.subtitle2!.copyWith(
-            fontFamily: fontName2,
-            fontSize: 14,
-            letterSpacing: -0.333,
-            fontWeight: FontWeight.w400),
-        button: base.button!
-            .copyWith(fontFamily: fontName2, fontSize: 16, color: Colors.white),
-        caption: base.caption!.copyWith(
-            fontFamily: fontName2,
-            fontSize: 12,
-            color: Colors.grey,
-            fontWeight: FontWeight.w600,
-            letterSpacing: -0.333),
-        overline: base.overline!.copyWith(fontFamily: fontName2),
-        labelMedium: base.labelMedium!.copyWith(
-            fontFamily: fontName2,
-            fontSize: 16,
-            color: const Color(0xFF73E7E0),
-            fontWeight: FontWeight.w500,
-            letterSpacing: -0.333));
+          letterSpacing: -0.333),
+      headline1: base.headline1!.copyWith(
+          fontFamily: fontName2,
+          fontSize: 20,
+          color: const Color(0xFFFFFFFF),
+          letterSpacing: -0.333,
+          fontWeight: FontWeight.w500),
+      headline2: base.headline2!.copyWith(
+          fontFamily: fontName2, fontSize: 48, fontWeight: FontWeight.w500),
+      headline3: base.headline3!.copyWith(
+          fontFamily: fontName2,
+          fontSize: 17,
+          color: Colors.black87,
+          fontWeight: FontWeight.w600,
+          letterSpacing: -0.333),
+      headline4: base.headline4!.copyWith(
+        fontFamily: fontName2,
+        fontSize: 15,
+        letterSpacing: -0.333,
+        fontWeight: FontWeight.w500,
+      ),
+      headline5: base.headline5!.copyWith(
+          fontFamily: fontName2,
+          fontSize: 20,
+          color: const Color(0xFFFFFFFF),
+          fontWeight: FontWeight.w600,
+          letterSpacing: -0.333),
+      headline6: base.headline6!.copyWith(
+          fontFamily: fontName2,
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          letterSpacing: -0.333),
+      subtitle1: base.subtitle1!.copyWith(fontFamily: fontName2, fontSize: 14),
+      // don't touch below
+      subtitle2: base.subtitle2!.copyWith(
+          fontFamily: fontName2,
+          fontSize: 14,
+          letterSpacing: -0.333,
+          fontWeight: FontWeight.w400),
+      button: base.button!
+          .copyWith(fontFamily: fontName2, fontSize: 16, color: Colors.white),
+      caption: base.caption!.copyWith(
+          fontFamily: fontName2,
+          fontSize: 12,
+          color: Colors.grey,
+          fontWeight: FontWeight.w600,
+          letterSpacing: -0.333),
+      overline: base.overline!.copyWith(fontFamily: fontName2),
+      labelMedium: base.labelMedium!.copyWith(
+          fontFamily: fontName2,
+          fontSize: 16,
+          color: const Color(0xFF73E7E0),
+          fontWeight: FontWeight.w500,
+          letterSpacing: -0.333),
+    );
   }
 
   static ThemeData getTheme() {

@@ -74,6 +74,7 @@ void _showLogoutConfirmation(BuildContext parentContext, AuthState state) {
             child: Text('Log Out',
                 style: AppTheme.getTheme().textTheme.headline3)),
         content: Text('Are you sure you want to log out?',
+            textAlign: TextAlign.center,
             style: AppTheme.getTheme().textTheme.subtitle1),
         actions: <Widget>[
           Row(
