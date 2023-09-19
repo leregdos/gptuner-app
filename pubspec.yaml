@@ -34,6 +34,14 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.12.0
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/gptuner_icon.png"
+  adaptive_icon_foreground: "assets/logo_foreground.png"
+  adaptive_icon_background: "#ffffff"
 
 # The following section is specific to Flutter packages.
 flutter:
