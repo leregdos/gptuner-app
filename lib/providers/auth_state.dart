@@ -52,10 +52,30 @@ class AuthState with ChangeNotifier {
       return false;
     }
 
-    _token = token;
-    _expiryDate = expiryDate;
+    Uri uri = Uri.parse("${hostUrl}api/v1/users/getCurrentUser");
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Accept-Encoding": "gzip,deflate,br",
+      "Authorization": "Bearer $token"
+    };
+    final response = await http.get(uri, headers: headers);
+    if (response.statusCode == 200) {
+      _token = token;
+      _expiryDate = expiryDate;
+      if (jsonDecode(response.body)["user"] != null) {
+        user = User.fromJson(jsonDecode(response.body)['user']);
+      }
+      return true;
+    } else if (response.statusCode == 401) {
+      showSnackbar(
+          "There has been an authorization error. Please log in again.",
+          backgroundColor: AppTheme.getTheme().errorColor);
+    } else {
+      showSnackbar("There has been a server error. Please try again later.",
+          backgroundColor: AppTheme.getTheme().errorColor);
+    }
     notifyListeners();
-    return true;
+    return false;
   }
 
   Future<void> signup(String email, String password, String name,
@@ -99,7 +119,7 @@ class AuthState with ChangeNotifier {
             backgroundColor: AppTheme.getTheme().errorColor);
       }
     }
-    // await _storeTokenAndExpiryDate(_token!, _expiryDate!);
+    await _storeTokenAndExpiryDate(_token!, _expiryDate!);
     notifyListeners();
   }
 
@@ -132,14 +152,14 @@ class AuthState with ChangeNotifier {
           backgroundColor: AppTheme.getTheme().errorColor);
     }
 
-    // await _storeTokenAndExpiryDate(_token!, _expiryDate!);
+    await _storeTokenAndExpiryDate(_token!, _expiryDate!);
     notifyListeners();
   }
 
   Future<void> logout() async {
     _token = null;
     _expiryDate = null;
-    // await _removeTokenAndExpiryDate();
+    await _removeTokenAndExpiryDate();
     notifyListeners();
   }
 }

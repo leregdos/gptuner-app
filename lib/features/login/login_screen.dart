@@ -27,6 +27,18 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    Provider.of<AuthState>(context, listen: false)
+        .tryAutoLogin()
+        .then((isLoggedin) {
+      if (isLoggedin) {
+        Navigator.pushNamed(context, Routes.homeScreen);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final state = Provider.of<AuthState>(context, listen: false);
     return Scaffold(
