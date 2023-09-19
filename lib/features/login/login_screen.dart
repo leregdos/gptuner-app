@@ -15,7 +15,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
-  bool _passwordValidationError = false;
 
   _login() {
     // Here you'll eventually make the API call to authenticate.
@@ -88,7 +87,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextFormField(
                         validator: (val) {
                           if (val == null || val.isEmpty) {
-                            _passwordValidationError = true;
                             return "Please enter your password";
                           }
                           return null;

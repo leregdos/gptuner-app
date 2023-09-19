@@ -17,13 +17,6 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
-  _signup() {
-    // Here you'll eventually make the API call to authenticate.
-    // For now, just print the entered username and password.
-    print("Username: ${_usernameController.text}");
-    print("Password: ${_passwordController.text}");
-  }
-
   @override
   Widget build(BuildContext context) {
     final authState = Provider.of<AuthState>(context, listen: false);
@@ -157,8 +150,12 @@ class _SignupScreenState extends State<SignupScreen> {
                         style: AppTheme.getTheme().textTheme.subtitle2),
                     const SizedBox(height: 22.0),
                     InkWell(
-                      onTap: () {
-                        _signup();
+                      onTap: () async {
+                        // await authState.signup(
+                        //     _usernameController.text,
+                        //     _passwordController.text,
+                        //     name,
+                        //     _confirmPasswordController.text);
                       },
                       child: Container(
                         constraints: const BoxConstraints(

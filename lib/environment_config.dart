@@ -10,7 +10,7 @@ class EnvConfig {
     switch (backendEnvironment) {
       case 'development':
         {
-          hostUrl = "http://127.0.0.1:3000";
+          hostUrl = "http://127.0.0.1:3000/";
         }
         break;
 

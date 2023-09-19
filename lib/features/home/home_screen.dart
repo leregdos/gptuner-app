@@ -25,10 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: const Icon(FontAwesomeIcons.bars),
             onPressed: _onIconPressed,
           ),
-          // title: const Text(
-          //   "Welcome to GPTuner",
-          //   textAlign: TextAlign.center,
-          // ),
           elevation: 0.0, // This removes the shadow below the AppBar.
           backgroundColor:
               Colors.transparent, // Makes the AppBar background transparent.
