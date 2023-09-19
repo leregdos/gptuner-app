@@ -8,6 +8,8 @@ import 'package:gptuner/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+GlobalKey<ScaffoldMessengerState> messenger =
+    GlobalKey<ScaffoldMessengerState>();
 void main() {
   runApp(ChangeNotifierProvider(
       create: (context) => AuthState(), child: const MyApp()));
@@ -22,6 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'GPTuner',
       navigatorKey: navigatorKey,
+      scaffoldMessengerKey: messenger,
       theme: AppTheme.getTheme(),
       routes: routes,
       home: const LoginScreen(),

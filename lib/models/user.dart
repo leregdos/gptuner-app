@@ -7,6 +7,6 @@ class User {
   User.fromJson(Map<String, dynamic> json) {
     uid = json["_id"] ?? '';
     email = json["email"] ?? '';
-    email = json["name"] ?? '';
+    name = json["name"] ?? '';
   }
 }

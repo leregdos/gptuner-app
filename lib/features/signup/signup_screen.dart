@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gptuner/providers/auth_state.dart';
+import 'package:gptuner/shared/utils/constants.dart';
 import 'package:gptuner/shared/utils/functions.dart';
 import 'package:gptuner/shared/widgets/custom_loader.dart';
 import 'package:gptuner/theme/app_theme.dart';
@@ -228,6 +229,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                 setState(() {
                                   _isLoading = false;
                                 });
+                                if (!mounted) return;
+                                if (authState.isAuthenticated) {
+                                  Navigator.pushNamed(
+                                      context, Routes.homeScreen);
+                                }
                               }
                             },
                             child: Container(

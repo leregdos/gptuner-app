@@ -1,9 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:gptuner/environment_config.dart';
 import 'package:gptuner/models/user.dart';
 import 'package:gptuner/shared/utils/functions.dart';
+import 'package:gptuner/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -82,19 +82,57 @@ class AuthState with ChangeNotifier {
       if (jsonDecode(response.body)["user"] != null) {
         user = User.fromJson(jsonDecode(response.body)['user']);
       }
+      showSnackbar("Account creation successful.",
+          backgroundColor: Colors.greenAccent);
+    } else {
+      if (jsonDecode(response.body)["message"] != null) {
+        String message = jsonDecode(response.body)["message"];
+        if (message.substring(0, 6) == "E11000") {
+          showSnackbar("Email already exists. Please try again.",
+              backgroundColor: AppTheme.getTheme().errorColor);
+        } else {
+          showSnackbar("There has been a server error. Please try again later.",
+              backgroundColor: AppTheme.getTheme().errorColor);
+        }
+      } else {
+        showSnackbar("There has been a server error. Please try again later.",
+            backgroundColor: AppTheme.getTheme().errorColor);
+      }
     }
-
     // await _storeTokenAndExpiryDate(_token!, _expiryDate!);
     notifyListeners();
   }
 
   Future<void> login(String email, String password) async {
-    final response = await http
-        .post(Uri.parse(hostUrl), body: {'email': email, 'password': password});
-    // _token = response.data['token'];
-    // _expiryDate = DateTime.parse(response.data['expiryDate']);
+    Uri uri = Uri.parse("${hostUrl}api/v1/users/login");
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Accept-Encoding": "gzip,deflate,br"
+    };
+    Map<String, String> body = {
+      'email': email,
+      'password': password,
+    };
+    final response =
+        await http.post(uri, headers: headers, body: jsonEncode(body));
+    if (response.statusCode == 200) {
+      if (response.headers.containsKey('set-cookie')) {
+        _token = response.headers['set-cookie']!.split(';')[0].substring(4);
+        _expiryDate = parseJWTExpiry(
+            response.headers['set-cookie']!.split(';')[2].substring(9));
+      }
+      if (jsonDecode(response.body)["user"] != null) {
+        user = User.fromJson(jsonDecode(response.body)['user']);
+      }
+    } else if (response.statusCode == 401) {
+      showSnackbar("Incorrect email or password.",
+          backgroundColor: AppTheme.getTheme().errorColor);
+    } else {
+      showSnackbar("There has been a server error. Please try again later.",
+          backgroundColor: AppTheme.getTheme().errorColor);
+    }
 
-    await _storeTokenAndExpiryDate(_token!, _expiryDate!);
+    // await _storeTokenAndExpiryDate(_token!, _expiryDate!);
     notifyListeners();
   }
 
