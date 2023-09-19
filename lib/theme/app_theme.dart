@@ -80,6 +80,7 @@ class AppTheme {
     );
     final ThemeData base = ThemeData.light();
     return base.copyWith(
+      disabledColor: Colors.grey,
       colorScheme: colorScheme,
       primaryColor: primaryColor,
       indicatorColor: Colors.white,

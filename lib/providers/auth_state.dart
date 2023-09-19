@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:gptuner/environment_config.dart';
 import 'package:gptuner/models/user.dart';
+import 'package:gptuner/shared/utils/functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -57,21 +60,27 @@ class AuthState with ChangeNotifier {
 
   Future<void> signup(String email, String password, String name,
       String passwordConfirm) async {
-    final response =
-        await http.post(Uri.parse("$hostUrl/api/v1/users/signup"), body: {
+    Uri uri = Uri.parse("${hostUrl}api/v1/users/signup");
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Accept-Encoding": "gzip,deflate,br"
+    };
+    Map<String, String> body = {
       'email': email,
       'password': password,
       'name': name,
       'passwordConfirm': passwordConfirm
-    });
-    print(response.body);
+    };
+    final response =
+        await http.post(uri, headers: headers, body: jsonEncode(body));
     if (response.statusCode == 201) {
       if (response.headers.containsKey('set-cookie')) {
-        _token = response.headers['set-cookie']!.split(';')[0];
-        print(_token);
-        _expiryDate =
-            DateTime.parse(response.headers['set-cookie']!.split(';')[2]);
-        print(_expiryDate);
+        _token = response.headers['set-cookie']!.split(';')[0].substring(4);
+        _expiryDate = parseJWTExpiry(
+            response.headers['set-cookie']!.split(';')[2].substring(9));
+      }
+      if (jsonDecode(response.body)["user"] != null) {
+        user = User.fromJson(jsonDecode(response.body)['user']);
       }
     }
 

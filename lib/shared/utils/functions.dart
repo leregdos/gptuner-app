@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 String? emailValidator(String? value) {
   if (value == null || value.isEmpty) {
     return "Please enter your email";
@@ -20,4 +22,10 @@ String? passwordValidator(String? value) {
   }
 
   return null;
+}
+
+DateTime parseJWTExpiry(String expiryDate) {
+  DateFormat format = DateFormat("EEE, dd MMM yyyy HH:mm:ss 'GMT'");
+  DateTime parsedDate = format.parse(expiryDate);
+  return parsedDate;
 }
