@@ -47,12 +47,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 50,
               ),
               Expanded(child: _buildRoundedCardButton("Submit Prompt", 0)),
-              const SizedBox(height: 20), // For spacing
+              const SizedBox(height: 40), // For spacing
               Expanded(
                   child: _buildRoundedCardButton("Submit Demonstration", 1)),
-              const SizedBox(height: 20), // For spacing
+              const SizedBox(height: 40), // For spacing
               Expanded(
-                  child: _buildRoundedCardButton("Validate Submissions", 1)),
+                  child: _buildRoundedCardButton("Validate Submissions", 2)),
               const Spacer(),
             ],
           ),
@@ -63,6 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildRoundedCardButton(String title, int index) {
     return Card(
+      elevation: 5.0,
+      shadowColor: Colors.black87,
       color: AppTheme.getTheme().cardColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -77,21 +79,24 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(20),
           width: double.infinity,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Flexible(
                 flex: 2,
-                child: Text(
-                  title,
-                  style: AppTheme.getTheme().textTheme.headline5,
-                  overflow: TextOverflow.visible,
-                  textAlign: TextAlign.center,
+                child: Center(
+                  child: Text(
+                    title,
+                    style: AppTheme.getTheme().textTheme.headline5,
+                    overflow: TextOverflow.visible,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
               const Spacer(),
               Icon(
                 FontAwesomeIcons.paperPlane,
                 color: AppTheme.getTheme().primaryColor,
+                size: 18,
               ),
             ],
           ),

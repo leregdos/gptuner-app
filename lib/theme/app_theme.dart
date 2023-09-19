@@ -41,9 +41,10 @@ class AppTheme {
         ),
         headline5: base.headline5!.copyWith(
             fontFamily: fontName2,
-            fontSize: 24,
+            fontSize: 20,
             color: const Color(0xFFFFFFFF),
-            fontWeight: FontWeight.w700),
+            fontWeight: FontWeight.w600,
+            letterSpacing: -0.333),
         headline6: base.headline6!.copyWith(
             fontFamily: fontName2,
             fontSize: 20,
