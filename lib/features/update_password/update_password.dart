@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gptuner/providers/auth_state.dart';
 import 'package:gptuner/shared/widgets/custom_loader.dart';
 import 'package:gptuner/theme/app_theme.dart';
+import 'package:provider/provider.dart';
 
 class UpdatePasswordScreen extends StatefulWidget {
   const UpdatePasswordScreen({super.key});
@@ -25,6 +27,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final state = Provider.of<AuthState>(context, listen: false);
     return Scaffold(
       backgroundColor: const Color(0xFF8AA1A9),
       appBar: AppBar(
@@ -90,6 +93,8 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                             validator: (val) {
                               if (val == null || val.isEmpty) {
                                 return "Please enter your new password";
+                              } else if (val.length < 8) {
+                                return "New password should have at least 8 characters";
                               }
                               return null;
                             },
@@ -173,7 +178,21 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                         bottom: 20.0, left: 16.0, right: 16.0),
                     child: InkWell(
                       onTap: () async {
-                        if (_formKey.currentState!.validate()) {}
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          bool success = await state.updatePassword(
+                              _passwordController.text,
+                              _newPasswordController.text,
+                              _newPasswordConfirmController.text);
+                          setState(() {
+                            _isLoading = false;
+                          });
+                          if (success) {
+                            Navigator.of(context).pop();
+                          }
+                        }
                       },
                       child: Container(
                         constraints: const BoxConstraints(

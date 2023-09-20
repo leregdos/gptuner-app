@@ -117,6 +117,7 @@ class AuthState with ChangeNotifier {
       }
       showSnackbar("Account creation successful.",
           backgroundColor: Colors.green);
+      notifyListeners();
     } else {
       if (jsonDecode(response.body)["message"] != null) {
         String message = jsonDecode(response.body)["message"];
@@ -132,7 +133,6 @@ class AuthState with ChangeNotifier {
             backgroundColor: AppTheme.getTheme().errorColor);
       }
     }
-    notifyListeners();
   }
 
   Future<void> login(String email, String password) async {
@@ -152,6 +152,7 @@ class AuthState with ChangeNotifier {
       if (jsonDecode(response.body)["user"] != null) {
         user = User.fromJson(jsonDecode(response.body)['user']);
       }
+      notifyListeners();
     } else if (response.statusCode == 401) {
       showSnackbar("Incorrect email or password.",
           backgroundColor: AppTheme.getTheme().errorColor);
@@ -159,7 +160,6 @@ class AuthState with ChangeNotifier {
       showSnackbar("There has been a server error. Please try again later.",
           backgroundColor: AppTheme.getTheme().errorColor);
     }
-    notifyListeners();
   }
 
   Future<void> updateUser(String? email, String? name) async {
@@ -180,6 +180,7 @@ class AuthState with ChangeNotifier {
       user!.name = name ?? user!.name;
       showSnackbar("Account updated successfully.",
           backgroundColor: Colors.green);
+      notifyListeners();
     } else if (response.statusCode == 401) {
       showSnackbar("Authentication error. Please log out and log in again.",
           backgroundColor: AppTheme.getTheme().errorColor);
@@ -187,7 +188,43 @@ class AuthState with ChangeNotifier {
       showSnackbar("There has been a server error. Please try again later.",
           backgroundColor: AppTheme.getTheme().errorColor);
     }
-    notifyListeners();
+  }
+
+  Future<bool> updatePassword(
+      String password, String newPassword, String newPasswordConfirm) async {
+    Map<String, String> body = {
+      "password": password,
+      "newPassword": newPassword,
+      "newPasswordConfirm": newPasswordConfirm
+    };
+    final response = await _sendRequest("api/v1/users/updateMyPassword",
+        method: "PATCH",
+        body: body,
+        headers: {"Authorization": "Bearer $_token"});
+    if (response.statusCode == 200) {
+      if (response.headers.containsKey('set-cookie')) {
+        _token = response.headers['set-cookie']!.split(';')[0].substring(4);
+        _expiryDate = parseJWTExpiry(
+            response.headers['set-cookie']!.split(';')[2].substring(9));
+        await _storeTokenAndExpiryDate(_token!, _expiryDate!);
+        showSnackbar("Password updated successfully.",
+            backgroundColor: Colors.green);
+        notifyListeners();
+        return true;
+      } else {
+        showSnackbar("There has been a server error. Please try again later.",
+            backgroundColor: AppTheme.getTheme().errorColor);
+        return false;
+      }
+    } else if (response.statusCode == 401) {
+      showSnackbar("Incorrect Password. Please try again.",
+          backgroundColor: AppTheme.getTheme().errorColor);
+      return false;
+    } else {
+      showSnackbar("There has been a server error. Please try again later.",
+          backgroundColor: AppTheme.getTheme().errorColor);
+      return false;
+    }
   }
 
   Future<void> logout() async {
