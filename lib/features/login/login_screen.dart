@@ -266,10 +266,12 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          if (_isLoading)
-            Positioned.fill(
+          Visibility(
+            visible: _isLoading,
+            child: Positioned.fill(
               child: Container(color: Colors.grey.withOpacity(0.7)),
             ),
+          ),
           Center(child: Visibility(visible: _isLoading, child: CustomLoader())),
         ],
       ),
