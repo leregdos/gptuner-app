@@ -152,7 +152,9 @@ Widget buildSidebar(AuthState state, BuildContext context) {
             leading: const Icon(Icons.settings, color: Colors.white),
             title:
                 Text('Settings', style: AppTheme.getTheme().textTheme.button),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, Routes.settingsScreen);
+            },
           ),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.white),
