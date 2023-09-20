@@ -38,7 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: Stack(children: [
         Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
           child: Column(
             children: [
               Expanded(
@@ -91,32 +91,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
               ),
-              ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      AppTheme.getTheme().backgroundColor),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                  ),
-                ),
-                onPressed: () async {
-                  if (_name != state.user!.name ||
-                      _email != state.user!.email) {
-                    setState(() {
-                      _isLoading = true;
-                    });
-                    await state.updateUser(_email, _name);
-                    setState(() {
-                      _isLoading = false;
-                    });
-                  }
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Text(
-                    'Save Changes',
-                    style: AppTheme.getTheme().textTheme.headline4,
+              Padding(
+                padding: const EdgeInsets.only(
+                    bottom: 20.0, left: 32.0, right: 32.0),
+                child: InkWell(
+                  onTap: () async {
+                    if (_name != state.user!.name ||
+                        _email != state.user!.email) {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      await state.updateUser(_email, _name);
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    }
+                  },
+                  child: Container(
+                    constraints: const BoxConstraints(
+                        minWidth: 200, maxWidth: double.infinity),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 1.0, vertical: 18.0),
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                            offset: const Offset(0, 3),
+                          )
+                        ],
+                        borderRadius: BorderRadius.circular(17.0),
+                        color: AppTheme.getTheme().backgroundColor),
+                    child: Center(
+                      child: Text(
+                        "Update Profile",
+                        style: AppTheme.getTheme().textTheme.headline4,
+                      ),
+                    ),
                   ),
                 ),
               )

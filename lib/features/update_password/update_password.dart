@@ -37,7 +37,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 32.0, right: 32.0, top: 25.0),
+            padding: const EdgeInsets.only(left: 48.0, right: 48.0, top: 25.0),
             child: Form(
               key: _formKey,
               child: Column(
@@ -169,7 +169,8 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0),
+                    padding: const EdgeInsets.only(
+                        bottom: 20.0, left: 16.0, right: 16.0),
                     child: InkWell(
                       onTap: () async {
                         if (_formKey.currentState!.validate()) {}
