@@ -106,7 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     setState(() {
                       _isLoading = true;
                     });
-
+                    await state.updateUser(_email, _name);
                     setState(() {
                       _isLoading = false;
                     });

@@ -53,6 +53,8 @@ class AuthState with ChangeNotifier {
 
     if (method == 'POST') {
       return await http.post(uri, headers: headers, body: jsonEncode(body));
+    } else if (method == 'PATCH') {
+      return await http.patch(uri, headers: headers, body: jsonEncode(body));
     } else {
       return await http.get(uri, headers: headers);
     }
@@ -114,7 +116,7 @@ class AuthState with ChangeNotifier {
         user = User.fromJson(jsonDecode(response.body)['user']);
       }
       showSnackbar("Account creation successful.",
-          backgroundColor: Colors.greenAccent);
+          backgroundColor: Colors.green);
     } else {
       if (jsonDecode(response.body)["message"] != null) {
         String message = jsonDecode(response.body)["message"];
@@ -152,6 +154,34 @@ class AuthState with ChangeNotifier {
       }
     } else if (response.statusCode == 401) {
       showSnackbar("Incorrect email or password.",
+          backgroundColor: AppTheme.getTheme().errorColor);
+    } else {
+      showSnackbar("There has been a server error. Please try again later.",
+          backgroundColor: AppTheme.getTheme().errorColor);
+    }
+    notifyListeners();
+  }
+
+  Future<void> updateUser(String? email, String? name) async {
+    Map<String, String> body = {};
+    if (email != null) {
+      body['email'] = email;
+    }
+    if (name != null) {
+      body['name'] = name;
+      user!.name = name;
+    }
+    final response = await _sendRequest("api/v1/users/updateMe",
+        method: "PATCH",
+        body: body,
+        headers: {"Authorization": "Bearer $_token"});
+    if (response.statusCode == 200) {
+      user!.email = email ?? user!.email;
+      user!.name = name ?? user!.name;
+      showSnackbar("Account updated successfully.",
+          backgroundColor: Colors.green);
+    } else if (response.statusCode == 401) {
+      showSnackbar("Authentication error. Please log out and log in again.",
           backgroundColor: AppTheme.getTheme().errorColor);
     } else {
       showSnackbar("There has been a server error. Please try again later.",
