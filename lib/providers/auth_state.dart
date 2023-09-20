@@ -39,6 +39,25 @@ class AuthState with ChangeNotifier {
     await prefs.remove('expiryDate');
   }
 
+  static const Map<String, String> _headers = {
+    "Content-Type": "application/json",
+    "Accept-Encoding": "gzip,deflate,br",
+  };
+
+  Future<http.Response> _sendRequest(String endpoint,
+      {String method = 'GET',
+      Map<String, String>? headers,
+      dynamic body}) async {
+    final uri = Uri.parse('$hostUrl$endpoint');
+    headers = {..._headers, ...?headers};
+
+    if (method == 'POST') {
+      return await http.post(uri, headers: headers, body: jsonEncode(body));
+    } else {
+      return await http.get(uri, headers: headers);
+    }
+  }
+
   Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('jwtToken') || !prefs.containsKey('expiryDate')) {
@@ -52,13 +71,9 @@ class AuthState with ChangeNotifier {
       return false;
     }
 
-    Uri uri = Uri.parse("${hostUrl}api/v1/users/getCurrentUser");
-    Map<String, String> headers = {
-      "Content-Type": "application/json",
-      "Accept-Encoding": "gzip,deflate,br",
-      "Authorization": "Bearer $token"
-    };
-    final response = await http.get(uri, headers: headers);
+    final response = await _sendRequest("api/v1/users/getCurrentUser",
+        headers: {"Authorization": "Bearer $token"});
+
     if (response.statusCode == 200) {
       _token = token;
       _expiryDate = expiryDate;
@@ -80,11 +95,6 @@ class AuthState with ChangeNotifier {
 
   Future<void> signup(String email, String password, String name,
       String passwordConfirm) async {
-    Uri uri = Uri.parse("${hostUrl}api/v1/users/signup");
-    Map<String, String> headers = {
-      "Content-Type": "application/json",
-      "Accept-Encoding": "gzip,deflate,br"
-    };
     Map<String, String> body = {
       'email': email,
       'password': password,
@@ -92,7 +102,7 @@ class AuthState with ChangeNotifier {
       'passwordConfirm': passwordConfirm
     };
     final response =
-        await http.post(uri, headers: headers, body: jsonEncode(body));
+        await _sendRequest("api/v1/users/signup", method: "POST", body: body);
     if (response.statusCode == 201) {
       if (response.headers.containsKey('set-cookie')) {
         _token = response.headers['set-cookie']!.split(';')[0].substring(4);
@@ -124,17 +134,12 @@ class AuthState with ChangeNotifier {
   }
 
   Future<void> login(String email, String password) async {
-    Uri uri = Uri.parse("${hostUrl}api/v1/users/login");
-    Map<String, String> headers = {
-      "Content-Type": "application/json",
-      "Accept-Encoding": "gzip,deflate,br"
-    };
     Map<String, String> body = {
       'email': email,
       'password': password,
     };
     final response =
-        await http.post(uri, headers: headers, body: jsonEncode(body));
+        await _sendRequest("api/v1/users/login", method: "POST", body: body);
     if (response.statusCode == 200) {
       if (response.headers.containsKey('set-cookie')) {
         _token = response.headers['set-cookie']!.split(';')[0].substring(4);
