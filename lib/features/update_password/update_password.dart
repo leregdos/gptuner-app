@@ -189,6 +189,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                           setState(() {
                             _isLoading = false;
                           });
+                          if (!mounted) return;
                           if (success) {
                             Navigator.of(context).pop();
                           }
