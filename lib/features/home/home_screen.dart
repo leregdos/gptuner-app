@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gptuner/providers/auth_state.dart';
+import 'package:gptuner/shared/utils/constants.dart';
 import 'package:gptuner/shared/utils/functions.dart';
 import 'package:gptuner/theme/app_theme.dart';
 import 'package:provider/provider.dart';
@@ -72,7 +73,13 @@ class _HomeScreenState extends State<HomeScreen> {
       child: InkWell(
         onTap: () {
           // Placeholder function for your card button action
-          print("$title pressed!");
+          if (index == 0) {
+            Navigator.pushNamed(context, Routes.submitPromptScreen);
+          } else if (index == 1) {
+            Navigator.pushNamed(context, Routes.submitDemonstrationScreen);
+          } else if (index == 2) {
+            Navigator.pushNamed(context, Routes.validateSubmissionsScreen);
+          }
         },
         borderRadius: BorderRadius.circular(20),
         child: Container(

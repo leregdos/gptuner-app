@@ -4,7 +4,10 @@ import 'package:gptuner/features/login/login_screen.dart';
 import 'package:gptuner/features/profile/profile_screen.dart';
 import 'package:gptuner/features/settings/settings_screen.dart';
 import 'package:gptuner/features/signup/signup_screen.dart';
+import 'package:gptuner/features/submit_demonstration/submit_demonstration.dart';
+import 'package:gptuner/features/submit_prompt/submit_prompt.dart';
 import 'package:gptuner/features/update_password/update_password.dart';
+import 'package:gptuner/features/validate/validate_submissions.dart';
 import 'package:gptuner/providers/auth_state.dart';
 import 'package:gptuner/shared/utils/constants.dart';
 import 'package:gptuner/theme/app_theme.dart';
@@ -44,4 +47,10 @@ var routes = <String, WidgetBuilder>{
   Routes.settingsScreen: (BuildContext context) => const SettingsScreen(),
   Routes.updatePasswordScreen: (BuildContext context) =>
       const UpdatePasswordScreen(),
+  Routes.submitPromptScreen: (BuildContext context) =>
+      const SubmitPromptScreen(),
+  Routes.submitDemonstrationScreen: (context) =>
+      const SubmitDemonstrationScreen(),
+  Routes.validateSubmissionsScreen: (context) =>
+      const ValidateSubmissionsScreen(),
 };
