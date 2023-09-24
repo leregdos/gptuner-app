@@ -9,6 +9,7 @@ import 'package:gptuner/features/submit_prompt/submit_prompt.dart';
 import 'package:gptuner/features/update_password/update_password.dart';
 import 'package:gptuner/features/validate/validate_submissions.dart';
 import 'package:gptuner/providers/auth_state.dart';
+import 'package:gptuner/providers/document_state.dart';
 import 'package:gptuner/shared/utils/constants.dart';
 import 'package:gptuner/theme/app_theme.dart';
 import 'package:provider/provider.dart';
@@ -17,8 +18,7 @@ GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 GlobalKey<ScaffoldMessengerState> messenger =
     GlobalKey<ScaffoldMessengerState>();
 void main() {
-  runApp(ChangeNotifierProvider(
-      create: (context) => AuthState(), child: const MyApp()));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -27,13 +27,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'GPTuner',
-      navigatorKey: navigatorKey,
-      scaffoldMessengerKey: messenger,
-      theme: AppTheme.getTheme(),
-      routes: routes,
-      home: const LoginScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AuthState()),
+        ChangeNotifierProvider(create: (context) => DocumentState())
+      ],
+      child: MaterialApp(
+        title: 'GPTuner',
+        navigatorKey: navigatorKey,
+        scaffoldMessengerKey: messenger,
+        theme: AppTheme.getTheme(),
+        routes: routes,
+        home: const LoginScreen(),
+      ),
     );
   }
 }

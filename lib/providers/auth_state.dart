@@ -5,7 +5,6 @@ import 'package:gptuner/models/user.dart';
 import 'package:gptuner/shared/utils/functions.dart';
 import 'package:gptuner/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class AuthState with ChangeNotifier {
   String? _token;
@@ -39,27 +38,6 @@ class AuthState with ChangeNotifier {
     await prefs.remove('expiryDate');
   }
 
-  static const Map<String, String> _headers = {
-    "Content-Type": "application/json",
-    "Accept-Encoding": "gzip,deflate,br",
-  };
-
-  Future<http.Response> _sendRequest(String endpoint,
-      {String method = 'GET',
-      Map<String, String>? headers,
-      dynamic body}) async {
-    final uri = Uri.parse('$hostUrl$endpoint');
-    headers = {..._headers, ...?headers};
-
-    if (method == 'POST') {
-      return await http.post(uri, headers: headers, body: jsonEncode(body));
-    } else if (method == 'PATCH') {
-      return await http.patch(uri, headers: headers, body: jsonEncode(body));
-    } else {
-      return await http.get(uri, headers: headers);
-    }
-  }
-
   Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('jwtToken') || !prefs.containsKey('expiryDate')) {
@@ -73,8 +51,8 @@ class AuthState with ChangeNotifier {
       return false;
     }
 
-    final response = await _sendRequest("api/v1/users/getCurrentUser",
-        headers: {"Authorization": "Bearer $token"});
+    final response = await sendRequest("api/v1/users/getCurrentUser",
+        headersAlt: {"Authorization": "Bearer $token"}, hostUrl: hostUrl);
 
     if (response.statusCode == 200) {
       _token = token;
@@ -103,8 +81,8 @@ class AuthState with ChangeNotifier {
       'name': name,
       'passwordConfirm': passwordConfirm
     };
-    final response =
-        await _sendRequest("api/v1/users/signup", method: "POST", body: body);
+    final response = await sendRequest("api/v1/users/signup",
+        method: "POST", body: body, hostUrl: hostUrl);
     if (response.statusCode == 201) {
       if (response.headers.containsKey('set-cookie')) {
         _token = response.headers['set-cookie']!.split(';')[0].substring(4);
@@ -140,8 +118,8 @@ class AuthState with ChangeNotifier {
       'email': email,
       'password': password,
     };
-    final response =
-        await _sendRequest("api/v1/users/login", method: "POST", body: body);
+    final response = await sendRequest("api/v1/users/login",
+        method: "POST", body: body, hostUrl: hostUrl);
     if (response.statusCode == 200) {
       if (response.headers.containsKey('set-cookie')) {
         _token = response.headers['set-cookie']!.split(';')[0].substring(4);
@@ -171,10 +149,11 @@ class AuthState with ChangeNotifier {
       body['name'] = name;
       user!.name = name;
     }
-    final response = await _sendRequest("api/v1/users/updateMe",
+    final response = await sendRequest("api/v1/users/updateMe",
         method: "PATCH",
         body: body,
-        headers: {"Authorization": "Bearer $_token"});
+        headersAlt: {"Authorization": "Bearer $_token"},
+        hostUrl: hostUrl);
     if (response.statusCode == 200) {
       user!.email = email ?? user!.email;
       user!.name = name ?? user!.name;
@@ -197,10 +176,11 @@ class AuthState with ChangeNotifier {
       "newPassword": newPassword,
       "newPasswordConfirm": newPasswordConfirm
     };
-    final response = await _sendRequest("api/v1/users/updateMyPassword",
+    final response = await sendRequest("api/v1/users/updateMyPassword",
         method: "PATCH",
         body: body,
-        headers: {"Authorization": "Bearer $_token"});
+        headersAlt: {"Authorization": "Bearer $_token"},
+        hostUrl: hostUrl);
     if (response.statusCode == 200) {
       if (response.headers.containsKey('set-cookie')) {
         _token = response.headers['set-cookie']!.split(';')[0].substring(4);

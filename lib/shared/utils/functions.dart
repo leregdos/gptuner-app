@@ -168,3 +168,24 @@ Widget buildSidebar(AuthState state, BuildContext context) {
     ),
   );
 }
+
+Future<http.Response> sendRequest(String endpoint,
+    {String method = 'GET',
+    Map<String, String>? headersAlt,
+    dynamic body,
+    String? hostUrl}) async {
+  const Map<String, String> headers = {
+    "Content-Type": "application/json",
+    "Accept-Encoding": "gzip,deflate,br",
+  };
+  final uri = Uri.parse('$hostUrl$endpoint');
+  headersAlt = {...headers, ...?headersAlt};
+
+  if (method == 'POST') {
+    return await http.post(uri, headers: headersAlt, body: jsonEncode(body));
+  } else if (method == 'PATCH') {
+    return await http.patch(uri, headers: headersAlt, body: jsonEncode(body));
+  } else {
+    return await http.get(uri, headers: headersAlt);
+  }
+}
