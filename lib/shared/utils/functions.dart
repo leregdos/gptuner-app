@@ -189,3 +189,31 @@ Future<http.Response> sendRequest(String endpoint,
     return await http.get(uri, headers: headersAlt);
   }
 }
+
+PageRouteBuilder customPageRoute(Widget page) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      // Fade transition configuration
+      const beginFade = 0.0;
+      const endFade = 1.0;
+      var tweenFade = Tween(begin: beginFade, end: endFade);
+      var fadeAnimation = animation.drive(tweenFade);
+
+      // Scale transition configuration
+      const beginScale = 0.9;
+      const endScale = 1.0;
+      var tweenScale = Tween(begin: beginScale, end: endScale)
+          .chain(CurveTween(curve: Curves.easeInOut));
+      var scaleAnimation = animation.drive(tweenScale);
+
+      return FadeTransition(
+        opacity: fadeAnimation,
+        child: ScaleTransition(
+          scale: scaleAnimation,
+          child: child,
+        ),
+      );
+    },
+  );
+}

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gptuner/features/submit_demonstration/submit_demonstration.dart';
+import 'package:gptuner/features/submit_prompt/submit_prompt.dart';
+import 'package:gptuner/features/validate/validate_submissions.dart';
 import 'package:gptuner/providers/auth_state.dart';
 import 'package:gptuner/shared/utils/constants.dart';
 import 'package:gptuner/shared/utils/functions.dart';
@@ -74,11 +77,14 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: () {
           // Placeholder function for your card button action
           if (index == 0) {
-            Navigator.pushNamed(context, Routes.submitPromptScreen);
+            Navigator.of(context)
+                .push(customPageRoute(const SubmitPromptScreen()));
           } else if (index == 1) {
-            Navigator.pushNamed(context, Routes.submitDemonstrationScreen);
+            Navigator.of(context)
+                .push(customPageRoute(const SubmitDemonstrationScreen()));
           } else if (index == 2) {
-            Navigator.pushNamed(context, Routes.validateSubmissionsScreen);
+            Navigator.of(context)
+                .push(customPageRoute(const ValidateSubmissionsScreen()));
           }
         },
         borderRadius: BorderRadius.circular(20),
