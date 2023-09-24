@@ -225,9 +225,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: InkWell(
-                            onTap: () {
-                              print("forgot pass");
-                            },
+                            onTap: () {},
                             child: Text(
                               "Forgot Password?",
                               style: AppTheme.getTheme().textTheme.caption,

@@ -8,11 +8,10 @@ class SubmitDemonstrationScreen extends StatefulWidget {
 }
 
 class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
-  TextEditingController _textController = TextEditingController();
+  final TextEditingController _textController = TextEditingController();
 
   void _handleSubmit() {
     // Logic for when the submit button is pressed.
-    print("Submitted: ${_textController.text}");
   }
 
   @override
