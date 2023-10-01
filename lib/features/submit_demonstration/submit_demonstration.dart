@@ -1,9 +1,12 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gptuner/providers/auth_state.dart';
+import 'package:gptuner/providers/document_state.dart';
+import 'package:gptuner/shared/widgets/custom_loader.dart';
 import 'package:gptuner/theme/app_theme.dart';
+import 'package:provider/provider.dart';
 
 class SubmitDemonstrationScreen extends StatefulWidget {
   const SubmitDemonstrationScreen({Key? key}) : super(key: key);
@@ -15,21 +18,22 @@ class SubmitDemonstrationScreen extends StatefulWidget {
 class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
   final TextEditingController _textController = TextEditingController();
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
-  bool _isValid = false;
   List<String> messages = [];
-
   void _sendMessage() {
     String msg = _textController.text.trim();
 
     if (msg.isNotEmpty) {
       setState(() {
         messages.add(msg);
-        _textController.clear();
       });
-      _isValid = false;
-      _listKey.currentState?.insertItem(messages.length,
+      _listKey.currentState?.insertItem(messages.length - 1,
           duration: const Duration(milliseconds: 500));
+      _textController.clear();
     }
+  }
+
+  void _skipPrompt() {
+    _textController.clear();
   }
 
   void _alertDialog(String title, Function callback) {
@@ -81,7 +85,7 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
                   child: Text('Yes',
                       style: AppTheme.getTheme().textTheme.bodyText2),
                   onPressed: () {
-                    _sendMessage();
+                    callback();
                     Navigator.of(context).pop();
                   },
                 ),
@@ -91,74 +95,66 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.getTheme().primaryColor,
-      appBar: AppBar(
-        backgroundColor: AppTheme.getTheme().backgroundColor,
-        title: Text(
-          'Demonstration Submission',
-          style: AppTheme.getTheme().textTheme.headline3,
+  Widget buildMainContent() {
+    if (messages.isEmpty) {
+      return Center(
+        child: Card(
+          color: Colors.grey.shade400,
+          elevation: 10.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Text(
+                "There are no prompts to answer at this time. Please check back later.",
+                textAlign: TextAlign.center,
+                style: AppTheme.getTheme().textTheme.subtitle1,
+              ),
+            ),
+          ),
         ),
-      ),
-      body: Column(
+      );
+    }
+    return Padding(
+      padding: const EdgeInsets.only(top: 15.0),
+      child: Column(
         children: <Widget>[
           Expanded(
             child: AnimatedList(
               key: _listKey,
-              initialItemCount: 1,
+              initialItemCount: messages.length,
               itemBuilder: (context, index, animation) {
-                if (index == 0) {
-                  return Padding(
+                return SizeTransition(
+                  sizeFactor: animation,
+                  child: Padding(
                     padding: const EdgeInsets.only(top: 10, bottom: 10),
                     child: Container(
                       padding: const EdgeInsets.only(
-                          left: 14, right: 14, top: 10, bottom: 10),
+                          left: 14, right: 14, bottom: 10),
                       child: Align(
-                        alignment: Alignment.topLeft,
+                        alignment: (index.isEven)
+                            ? Alignment.topLeft
+                            : Alignment.topRight,
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: Colors.grey.shade200,
+                            color: (index.isEven)
+                                ? Colors.grey.shade200
+                                : AppTheme.getTheme().backgroundColor,
                           ),
                           padding: const EdgeInsets.all(16),
                           child: Text(
-                            "Insert Prompt here",
+                            messages[index],
                             style: AppTheme.getTheme().textTheme.bodyText1,
                           ),
                         ),
                       ),
                     ),
-                  );
-                }
-                if (index <= messages.length) {
-                  return SizeTransition(
-                    sizeFactor: animation,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: Container(
-                        padding: const EdgeInsets.only(
-                            left: 14, right: 14, bottom: 10),
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: AppTheme.getTheme().backgroundColor,
-                            ),
-                            padding: const EdgeInsets.all(16),
-                            child: Text(
-                              messages[index - 1],
-                              style: AppTheme.getTheme().textTheme.bodyText1,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }
-                return Container();
+                  ),
+                );
               },
             ),
           ),
@@ -171,17 +167,6 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
-                      onChanged: (val) {
-                        if (_textController.text.isEmpty) {
-                          setState(() {
-                            _isValid = false;
-                          });
-                        } else {
-                          setState(() {
-                            _isValid = true;
-                          });
-                        }
-                      },
                       controller: _textController,
                       maxLines: null,
                       keyboardType: TextInputType.multiline,
@@ -195,16 +180,12 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
                     width: 15,
                   ),
                   FloatingActionButton(
+                    heroTag: "skip",
                     onPressed: () {
-                      if (_textController.text.isNotEmpty) {
-                        _alertDialog(
-                            "Are you sure you want to skip this prompt?",
-                            _sendMessage);
-                      }
+                      _alertDialog("Are you sure you want to skip this prompt?",
+                          _skipPrompt);
                     },
-                    backgroundColor: _isValid
-                        ? AppTheme.getTheme().backgroundColor
-                        : AppTheme.getTheme().disabledColor,
+                    backgroundColor: AppTheme.getTheme().backgroundColor,
                     elevation: 0,
                     child: const Icon(
                       FontAwesomeIcons.forwardStep,
@@ -216,6 +197,7 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
                     width: 5,
                   ),
                   FloatingActionButton(
+                    heroTag: "submit",
                     onPressed: () {
                       if (_textController.text.isNotEmpty) {
                         _alertDialog(
@@ -223,9 +205,7 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
                             _sendMessage);
                       }
                     },
-                    backgroundColor: _isValid
-                        ? AppTheme.getTheme().backgroundColor
-                        : AppTheme.getTheme().disabledColor,
+                    backgroundColor: AppTheme.getTheme().backgroundColor,
                     elevation: 0,
                     child: const Icon(
                       FontAwesomeIcons.paperPlane,
@@ -238,6 +218,51 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = Provider.of<AuthState>(context, listen: false);
+    final documentState = Provider.of<DocumentState>(context, listen: false);
+    return Scaffold(
+      backgroundColor: AppTheme.getTheme().primaryColor,
+      appBar: AppBar(
+        backgroundColor: AppTheme.getTheme().backgroundColor,
+        title: Text(
+          'Demonstration Submission',
+          style: AppTheme.getTheme().textTheme.headline3,
+        ),
+      ),
+      body: FutureBuilder(
+        future: documentState.promptList.isEmpty
+            ? documentState.getPromptsForAnswering(state.token!)
+            : Future.value(null),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Stack(
+              children: [
+                Positioned.fill(
+                  child: Container(color: Colors.grey.withOpacity(0.7)),
+                ),
+                const Center(child: CustomLoader()),
+              ],
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                'There has been an error, please try again.',
+                style: AppTheme.getTheme().textTheme.subtitle1,
+              ),
+            );
+          } else {
+            if (documentState.promptList.isNotEmpty && messages.isEmpty) {
+              messages.add(documentState.promptList.first.content!);
+            }
+            return buildMainContent();
+          }
+        },
       ),
     );
   }
