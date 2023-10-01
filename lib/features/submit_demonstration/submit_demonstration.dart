@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gptuner/theme/app_theme.dart';
 
@@ -132,7 +135,77 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
                     width: 15,
                   ),
                   FloatingActionButton(
-                    onPressed: _sendMessage,
+                    onPressed: () {
+                      if (Platform.isAndroid) {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text(
+                                  'Are you sure you want to submit this demonstration?',
+                                  textAlign: TextAlign.center,
+                                  style:
+                                      AppTheme.getTheme().textTheme.headline3),
+                              actions: [
+                                TextButton(
+                                  child: Text('No',
+                                      style: AppTheme.getTheme()
+                                          .textTheme
+                                          .bodyText2),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                TextButton(
+                                  child: Text('Yes',
+                                      style: AppTheme.getTheme()
+                                          .textTheme
+                                          .bodyText2),
+                                  onPressed: () {
+                                    _sendMessage();
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } else {
+                        showCupertinoDialog(
+                            context: context,
+                            builder: (context) {
+                              return CupertinoAlertDialog(
+                                title: Text(
+                                    'Are you sure you want to submit this demonstration?',
+                                    textAlign: TextAlign.center,
+                                    style: AppTheme.getTheme()
+                                        .textTheme
+                                        .headline3),
+                                actions: [
+                                  CupertinoDialogAction(
+                                    child: Text('No',
+                                        style: AppTheme.getTheme()
+                                            .textTheme
+                                            .bodyText2),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  CupertinoDialogAction(
+                                    child: Text('Yes',
+                                        style: AppTheme.getTheme()
+                                            .textTheme
+                                            .bodyText2),
+                                    onPressed: () {
+                                      _sendMessage();
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            });
+                      }
+                    },
                     backgroundColor: _isValid
                         ? AppTheme.getTheme().backgroundColor
                         : AppTheme.getTheme().disabledColor,
