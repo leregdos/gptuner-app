@@ -11,7 +11,6 @@ class AppTheme {
         "Poppins"; // used for intro screen heading and subheading
 
     return base.copyWith(
-      // Had to specify the fontSize manually here because didn't work.
       bodyText1: base.bodyText1!.copyWith(fontFamily: fontName2),
       // Don't touch below
       bodyText2: base.bodyText2!.copyWith(
