@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gptuner/theme/app_theme.dart';
 
 class SubmitDemonstrationScreen extends StatefulWidget {
@@ -28,6 +29,65 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
       _isValid = false;
       _listKey.currentState?.insertItem(messages.length,
           duration: const Duration(milliseconds: 500));
+    }
+  }
+
+  void _alertDialog(String title, Function callback) {
+    if (Platform.isAndroid) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title,
+                textAlign: TextAlign.center,
+                style: AppTheme.getTheme().textTheme.headline3),
+            actions: [
+              TextButton(
+                child:
+                    Text('No', style: AppTheme.getTheme().textTheme.bodyText2),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child:
+                    Text('Yes', style: AppTheme.getTheme().textTheme.bodyText2),
+                onPressed: () {
+                  callback();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      showCupertinoDialog(
+          context: context,
+          builder: (context) {
+            return CupertinoAlertDialog(
+              title: Text(title,
+                  textAlign: TextAlign.center,
+                  style: AppTheme.getTheme().textTheme.headline3),
+              actions: [
+                CupertinoDialogAction(
+                  child: Text('No',
+                      style: AppTheme.getTheme().textTheme.bodyText2),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                CupertinoDialogAction(
+                  child: Text('Yes',
+                      style: AppTheme.getTheme().textTheme.bodyText2),
+                  onPressed: () {
+                    _sendMessage();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          });
     }
   }
 
@@ -136,74 +196,10 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
                   ),
                   FloatingActionButton(
                     onPressed: () {
-                      if (Platform.isAndroid) {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text(
-                                  'Are you sure you want to submit this demonstration?',
-                                  textAlign: TextAlign.center,
-                                  style:
-                                      AppTheme.getTheme().textTheme.headline3),
-                              actions: [
-                                TextButton(
-                                  child: Text('No',
-                                      style: AppTheme.getTheme()
-                                          .textTheme
-                                          .bodyText2),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                                TextButton(
-                                  child: Text('Yes',
-                                      style: AppTheme.getTheme()
-                                          .textTheme
-                                          .bodyText2),
-                                  onPressed: () {
-                                    _sendMessage();
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      } else {
-                        showCupertinoDialog(
-                            context: context,
-                            builder: (context) {
-                              return CupertinoAlertDialog(
-                                title: Text(
-                                    'Are you sure you want to submit this demonstration?',
-                                    textAlign: TextAlign.center,
-                                    style: AppTheme.getTheme()
-                                        .textTheme
-                                        .headline3),
-                                actions: [
-                                  CupertinoDialogAction(
-                                    child: Text('No',
-                                        style: AppTheme.getTheme()
-                                            .textTheme
-                                            .bodyText2),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  CupertinoDialogAction(
-                                    child: Text('Yes',
-                                        style: AppTheme.getTheme()
-                                            .textTheme
-                                            .bodyText2),
-                                    onPressed: () {
-                                      _sendMessage();
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              );
-                            });
+                      if (_textController.text.isNotEmpty) {
+                        _alertDialog(
+                            "Are you sure you want to skip this prompt?",
+                            _sendMessage);
                       }
                     },
                     backgroundColor: _isValid
@@ -211,7 +207,28 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
                         : AppTheme.getTheme().disabledColor,
                     elevation: 0,
                     child: const Icon(
-                      Icons.send,
+                      FontAwesomeIcons.forwardStep,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  FloatingActionButton(
+                    onPressed: () {
+                      if (_textController.text.isNotEmpty) {
+                        _alertDialog(
+                            "Are you sure you want to submit this demonstration?",
+                            _sendMessage);
+                      }
+                    },
+                    backgroundColor: _isValid
+                        ? AppTheme.getTheme().backgroundColor
+                        : AppTheme.getTheme().disabledColor,
+                    elevation: 0,
+                    child: const Icon(
+                      FontAwesomeIcons.paperPlane,
                       color: Colors.white,
                       size: 18,
                     ),
