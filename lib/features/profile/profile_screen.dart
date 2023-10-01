@@ -7,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -141,14 +143,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Container(color: Colors.grey.withOpacity(0.7)),
           ),
         ),
-        Center(child: Visibility(visible: _isLoading, child: CustomLoader())),
+        Center(
+            child:
+                Visibility(visible: _isLoading, child: const CustomLoader())),
       ]),
     );
   }
 
   void _editProfile(BuildContext context, String title, String currentValue,
       Function(String) onUpdated) {
-    TextEditingController _controller =
+    TextEditingController controller =
         TextEditingController(text: currentValue);
     Platform.isAndroid
         ? showDialog(
@@ -157,7 +161,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               return AlertDialog(
                 title: Text('Edit $title'),
                 content: TextField(
-                  controller: _controller,
+                  controller: controller,
                   decoration: InputDecoration(
                     labelText: title,
                   ),
@@ -172,7 +176,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   TextButton(
                     child: const Text('Update'),
                     onPressed: () {
-                      onUpdated(_controller.text);
+                      onUpdated(controller.text);
                       Navigator.of(context).pop();
                     },
                   ),
@@ -188,7 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 content: Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: CupertinoTextField(
-                    controller: _controller,
+                    controller: controller,
                     placeholder: title,
                   ),
                 ),
@@ -202,7 +206,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   CupertinoDialogAction(
                     child: const Text('Update'),
                     onPressed: () {
-                      onUpdated(_controller.text);
+                      onUpdated(controller.text);
                       Navigator.of(context).pop();
                     },
                   ),

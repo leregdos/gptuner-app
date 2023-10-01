@@ -290,7 +290,8 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
             ),
             Center(
-                child: Visibility(visible: _isLoading, child: CustomLoader())),
+                child: Visibility(
+                    visible: _isLoading, child: const CustomLoader())),
           ],
         ),
       ),

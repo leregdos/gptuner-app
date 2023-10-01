@@ -4,7 +4,6 @@ import 'package:gptuner/features/submit_demonstration/submit_demonstration.dart'
 import 'package:gptuner/features/submit_prompt/submit_prompt.dart';
 import 'package:gptuner/features/validate/validate_submissions.dart';
 import 'package:gptuner/providers/auth_state.dart';
-import 'package:gptuner/shared/utils/constants.dart';
 import 'package:gptuner/shared/utils/functions.dart';
 import 'package:gptuner/theme/app_theme.dart';
 import 'package:provider/provider.dart';

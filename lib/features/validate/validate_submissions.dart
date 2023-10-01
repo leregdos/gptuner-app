@@ -18,7 +18,7 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Prompt Submission"),
+        title: const Text("Prompt Submission"),
       ),
       body: Center(
         child: Column(
@@ -38,7 +38,7 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen> {
                     TextField(
                       controller: _textController,
                       maxLines: 5,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Enter your prompt here...',
                         border: OutlineInputBorder(),
                       ),
@@ -46,7 +46,7 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen> {
                     const SizedBox(height: 20.0),
                     ElevatedButton(
                       onPressed: _handleSubmit,
-                      child: Text("Submit"),
+                      child: const Text("Submit"),
                     ),
                   ],
                 ),

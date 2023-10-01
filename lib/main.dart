@@ -49,7 +49,7 @@ var routes = <String, WidgetBuilder>{
   Routes.loginScreen: (BuildContext context) => const LoginScreen(),
   Routes.signupScreen: (BuildContext context) => const SignupScreen(),
   Routes.homeScreen: (BuildContext context) => const HomeScreen(),
-  Routes.profileScreen: (BuildContext context) => ProfileScreen(),
+  Routes.profileScreen: (BuildContext context) => const ProfileScreen(),
   Routes.settingsScreen: (BuildContext context) => const SettingsScreen(),
   Routes.updatePasswordScreen: (BuildContext context) =>
       const UpdatePasswordScreen(),

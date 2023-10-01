@@ -232,7 +232,9 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
               child: Container(color: Colors.grey.withOpacity(0.7)),
             ),
           ),
-          Center(child: Visibility(visible: _isLoading, child: CustomLoader())),
+          Center(
+              child:
+                  Visibility(visible: _isLoading, child: const CustomLoader())),
         ],
       ),
     );
