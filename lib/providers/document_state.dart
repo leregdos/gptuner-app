@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:gptuner/environment_config.dart';
+import 'package:gptuner/models/answer.dart';
+import 'package:gptuner/models/prompt.dart';
 import 'package:gptuner/shared/utils/functions.dart';
 import 'package:gptuner/theme/app_theme.dart';
 
 class DocumentState with ChangeNotifier {
   String hostUrl = EnvConfig.instance.hostUrl;
+  List<Prompt> _promptList = [];
+  List<Answer> _answerList = [];
+
+  List<Prompt> get promptList => _promptList;
+  List<Answer> get answerList => _answerList;
 
   Future<bool> submitPrompt(String userId, String token, String content) async {
     Map<String, String> body = {
