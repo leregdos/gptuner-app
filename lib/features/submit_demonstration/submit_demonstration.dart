@@ -19,7 +19,8 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
   final TextEditingController _textController = TextEditingController();
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   List<String> messages = [];
-  void _sendMessage() {
+  void _sendMessage(BuildContext context) async {
+    final documentState = Provider.of<DocumentState>(context, listen: false);
     String msg = _textController.text.trim();
 
     if (msg.isNotEmpty) {
@@ -28,12 +29,17 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
       });
       _listKey.currentState?.insertItem(messages.length - 1,
           duration: const Duration(milliseconds: 500));
+      messages.clear();
       _textController.clear();
+      await documentState.removeReceivedPrompt();
     }
   }
 
-  void _skipPrompt() {
+  void _skipPrompt(BuildContext context) async {
+    final documentState = Provider.of<DocumentState>(context, listen: false);
+    messages.clear();
     _textController.clear();
+    await documentState.removeReceivedPrompt();
   }
 
   void _alertDialog(String title, Function callback) {
@@ -85,7 +91,7 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
                   child: Text('Yes',
                       style: AppTheme.getTheme().textTheme.bodyText2),
                   onPressed: () {
-                    callback();
+                    callback(context);
                     Navigator.of(context).pop();
                   },
                 ),
@@ -225,7 +231,7 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<AuthState>(context, listen: false);
-    final documentState = Provider.of<DocumentState>(context, listen: false);
+    final documentState = Provider.of<DocumentState>(context, listen: true);
     return Scaffold(
       backgroundColor: AppTheme.getTheme().primaryColor,
       appBar: AppBar(

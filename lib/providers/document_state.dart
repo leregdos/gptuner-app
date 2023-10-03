@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:gptuner/environment_config.dart';
-import 'package:gptuner/models/answer.dart';
+// import 'package:gptuner/models/answer.dart';
 import 'package:gptuner/models/prompt.dart';
 import 'package:gptuner/shared/utils/functions.dart';
 import 'package:gptuner/theme/app_theme.dart';
@@ -10,10 +10,10 @@ import 'package:gptuner/theme/app_theme.dart';
 class DocumentState with ChangeNotifier {
   String hostUrl = EnvConfig.instance.hostUrl;
   List<Prompt> _promptList = [];
-  List<Answer> _answerList = [];
+  // final List<Answer> _answerList = [];
 
   List<Prompt> get promptList => _promptList;
-  List<Answer> get answerList => _answerList;
+  // List<Answer> get answerList => _answerList;
 
   Future<bool> submitPrompt(String userId, String token, String content) async {
     Map<String, String> body = {
@@ -61,5 +61,10 @@ class DocumentState with ChangeNotifier {
       showSnackbar("There has been a server error. Please try again later.",
           backgroundColor: AppTheme.getTheme().errorColor);
     }
+  }
+
+  Future removeReceivedPrompt() async {
+    _promptList.removeAt(0);
+    notifyListeners();
   }
 }
