@@ -10,9 +10,11 @@ import 'package:gptuner/theme/app_theme.dart';
 class DocumentState with ChangeNotifier {
   String hostUrl = EnvConfig.instance.hostUrl;
   List<Prompt> _promptList = [];
+  bool _noAvailablePrompt = false;
   // final List<Answer> _answerList = [];
 
   List<Prompt> get promptList => _promptList;
+  bool get noAvailablePrompt => _noAvailablePrompt;
   // List<Answer> get answerList => _answerList;
 
   Future<bool> submitPrompt(String userId, String token, String content) async {
@@ -53,6 +55,7 @@ class DocumentState with ChangeNotifier {
       notifyListeners();
     } else if (response.statusCode == 404) {
       _promptList = [];
+      _noAvailablePrompt = true;
       notifyListeners();
     } else if (response.statusCode == 401) {
       showSnackbar("Authentication error. Please log out and log in again.",
@@ -63,7 +66,34 @@ class DocumentState with ChangeNotifier {
     }
   }
 
-  Future removeReceivedPrompt() async {
+  Future submitDemonstration(
+      String token, String userId, String content) async {
+    if (promptList.isNotEmpty) {
+      Map<String, String> body = {
+        "content": content,
+        "submittedUser": userId,
+        "associatedPrompt": promptList[0].uid!,
+      };
+      final response = await sendRequest("api/v1/answers/",
+          headersAlt: {"Authorization": "Bearer $token"},
+          hostUrl: hostUrl,
+          method: 'POST',
+          body: body);
+      if (response.statusCode == 201) {
+        showSnackbar("Demonstration submitted successfully.",
+            backgroundColor: Colors.green);
+      } else if (response.statusCode == 401) {
+        showSnackbar("Authentication error. Please log out and log in again.",
+            backgroundColor: AppTheme.getTheme().errorColor);
+      } else {
+        showSnackbar("There has been a server error. Please try again later.",
+            backgroundColor: AppTheme.getTheme().errorColor);
+      }
+      removeReceivedPrompt();
+    }
+  }
+
+  void removeReceivedPrompt() {
     _promptList.removeAt(0);
     notifyListeners();
   }

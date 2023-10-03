@@ -21,6 +21,8 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
   List<String> messages = [];
   void _sendMessage(BuildContext context) async {
     final documentState = Provider.of<DocumentState>(context, listen: false);
+    final authState = Provider.of<AuthState>(context, listen: false);
+
     String msg = _textController.text.trim();
 
     if (msg.isNotEmpty) {
@@ -29,17 +31,18 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
       });
       _listKey.currentState?.insertItem(messages.length - 1,
           duration: const Duration(milliseconds: 500));
+      await documentState.submitDemonstration(
+          authState.token!, authState.user!.uid!, msg);
       messages.clear();
       _textController.clear();
-      await documentState.removeReceivedPrompt();
     }
   }
 
-  void _skipPrompt(BuildContext context) async {
+  void _skipPrompt(BuildContext context) {
     final documentState = Provider.of<DocumentState>(context, listen: false);
     messages.clear();
     _textController.clear();
-    await documentState.removeReceivedPrompt();
+    documentState.removeReceivedPrompt();
   }
 
   void _alertDialog(String title, Function callback) {
@@ -246,7 +249,8 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
             ? documentState.getPromptsForAnswering(state.token!)
             : Future.value(null),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          if (snapshot.connectionState == ConnectionState.waiting &&
+              !documentState.noAvailablePrompt) {
             return Stack(
               children: [
                 Positioned.fill(
