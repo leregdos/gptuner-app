@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gptuner/main.dart';
 import 'package:gptuner/providers/auth_state.dart';
+import 'package:gptuner/providers/document_state.dart';
 import 'package:gptuner/shared/utils/constants.dart';
 import 'package:gptuner/theme/app_theme.dart';
 import 'package:intl/intl.dart';
@@ -65,7 +66,8 @@ void showSnackbar(
     ..showSnackBar(snackBar);
 }
 
-void _showLogoutConfirmation(BuildContext parentContext, AuthState state) {
+void _showLogoutConfirmation(
+    BuildContext parentContext, AuthState state, DocumentState documentState) {
   showDialog(
     context: parentContext,
     builder: (BuildContext context) {
@@ -89,6 +91,7 @@ void _showLogoutConfirmation(BuildContext parentContext, AuthState state) {
                         style: AppTheme.getTheme().textTheme.bodyText2),
                   ),
                   onPressed: () {
+                    documentState.reset();
                     state.logout().then((_) {
                       if (Navigator.canPop(context)) {
                         Navigator.pushNamedAndRemoveUntil(
@@ -123,7 +126,8 @@ void _showLogoutConfirmation(BuildContext parentContext, AuthState state) {
   );
 }
 
-Widget buildSidebar(AuthState state, BuildContext context) {
+Widget buildSidebar(
+    AuthState state, BuildContext context, DocumentState documentState) {
   return Drawer(
     child: Container(
       color: const Color(0xFF8AA1A9), // Black-greyish color
@@ -160,7 +164,7 @@ Widget buildSidebar(AuthState state, BuildContext context) {
             leading: const Icon(Icons.logout, color: Colors.white),
             title: Text('Log Out', style: AppTheme.getTheme().textTheme.button),
             onTap: () {
-              _showLogoutConfirmation(context, state);
+              _showLogoutConfirmation(context, state, documentState);
             },
           ),
         ],

@@ -44,25 +44,30 @@ class DocumentState with ChangeNotifier {
   }
 
   Future getPromptsForAnswering(String token) async {
-    final response = await sendRequest("api/v1/prompts/getPromptsForAnswering",
-        headersAlt: {"Authorization": "Bearer $token"}, hostUrl: hostUrl);
-    if (response.statusCode == 200) {
-      _promptList = List<Prompt>.from(jsonDecode(response.body)["prompts"].map(
-        (prompt) {
-          return Prompt.fromJson(prompt);
-        },
-      ));
-      notifyListeners();
-    } else if (response.statusCode == 404) {
-      _promptList = [];
-      _noAvailablePrompt = true;
-      notifyListeners();
-    } else if (response.statusCode == 401) {
-      showSnackbar("Authentication error. Please log out and log in again.",
-          backgroundColor: AppTheme.getTheme().errorColor);
-    } else {
-      showSnackbar("There has been a server error. Please try again later.",
-          backgroundColor: AppTheme.getTheme().errorColor);
+    if (!_noAvailablePrompt) {
+      final response = await sendRequest(
+          "api/v1/prompts/getPromptsForAnswering",
+          headersAlt: {"Authorization": "Bearer $token"},
+          hostUrl: hostUrl);
+      if (response.statusCode == 200) {
+        _promptList =
+            List<Prompt>.from(jsonDecode(response.body)["prompts"].map(
+          (prompt) {
+            return Prompt.fromJson(prompt);
+          },
+        ));
+        notifyListeners();
+      } else if (response.statusCode == 404) {
+        _promptList = [];
+        _noAvailablePrompt = true;
+        notifyListeners();
+      } else if (response.statusCode == 401) {
+        showSnackbar("Authentication error. Please log out and log in again.",
+            backgroundColor: AppTheme.getTheme().errorColor);
+      } else {
+        showSnackbar("There has been a server error. Please try again later.",
+            backgroundColor: AppTheme.getTheme().errorColor);
+      }
     }
   }
 
@@ -96,5 +101,10 @@ class DocumentState with ChangeNotifier {
   void removeReceivedPrompt() {
     _promptList.removeAt(0);
     notifyListeners();
+  }
+
+  void reset() {
+    _promptList.clear();
+    _noAvailablePrompt = false;
   }
 }

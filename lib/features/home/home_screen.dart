@@ -4,6 +4,7 @@ import 'package:gptuner/features/submit_demonstration/submit_demonstration.dart'
 import 'package:gptuner/features/submit_prompt/submit_prompt.dart';
 import 'package:gptuner/features/validate/validate_submissions.dart';
 import 'package:gptuner/providers/auth_state.dart';
+import 'package:gptuner/providers/document_state.dart';
 import 'package:gptuner/shared/utils/functions.dart';
 import 'package:gptuner/theme/app_theme.dart';
 import 'package:provider/provider.dart';
@@ -22,10 +23,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<AuthState>(context, listen: false);
+    final documentState = Provider.of<DocumentState>(context, listen: false);
+
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        drawer: buildSidebar(state, context),
+        drawer: buildSidebar(state, context, documentState),
         backgroundColor: AppTheme.getTheme().backgroundColor,
         appBar: AppBar(
           leading: Builder(
