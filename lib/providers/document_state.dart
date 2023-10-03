@@ -79,6 +79,7 @@ class DocumentState with ChangeNotifier {
         "submittedUser": userId,
         "associatedPrompt": promptList[0].uid!,
       };
+      removeReceivedPrompt();
       final response = await sendRequest("api/v1/answers/",
           headersAlt: {"Authorization": "Bearer $token"},
           hostUrl: hostUrl,
@@ -94,7 +95,6 @@ class DocumentState with ChangeNotifier {
         showSnackbar("There has been a server error. Please try again later.",
             backgroundColor: AppTheme.getTheme().errorColor);
       }
-      removeReceivedPrompt();
     }
   }
 

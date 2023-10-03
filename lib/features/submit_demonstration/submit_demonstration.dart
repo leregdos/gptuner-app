@@ -31,10 +31,10 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
       });
       _listKey.currentState?.insertItem(messages.length - 1,
           duration: const Duration(milliseconds: 500));
-      await documentState.submitDemonstration(
-          authState.token!, authState.user!.uid!, msg);
       messages.clear();
       _textController.clear();
+      await documentState.submitDemonstration(
+          authState.token!, authState.user!.uid!, msg);
     }
   }
 
