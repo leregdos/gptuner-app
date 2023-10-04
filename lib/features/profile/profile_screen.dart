@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gptuner/providers/auth_state.dart';
+import 'package:gptuner/shared/utils/functions.dart';
 import 'package:gptuner/shared/widgets/custom_loader.dart';
 import 'package:gptuner/theme/app_theme.dart';
 import 'dart:io' show Platform;
@@ -17,6 +18,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late String _name;
   late String _email;
   bool _isLoading = false;
+  bool _validEmail = true;
+  bool _validName = true;
   @override
   void initState() {
     final state = Provider.of<AuthState>(context, listen: false);
@@ -64,6 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           _editProfile(context, 'Name', _name, (updatedValue) {
                             setState(() {
                               _name = updatedValue;
+                              _validName = _name.isNotEmpty;
                             });
                           });
                         },
@@ -85,6 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               (updatedValue) {
                             setState(() {
                               _email = updatedValue;
+                              _validEmail = emailValidatorBool(_email);
                             });
                           });
                         },
@@ -98,15 +103,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     bottom: 20.0, left: 32.0, right: 32.0),
                 child: InkWell(
                   onTap: () async {
-                    if (_name != state.user!.name ||
-                        _email != state.user!.email) {
-                      setState(() {
-                        _isLoading = true;
-                      });
-                      await state.updateUser(_email, _name);
-                      setState(() {
-                        _isLoading = false;
-                      });
+                    if (!_validEmail) {
+                      showSnackbar("Please enter a valid email address.",
+                          backgroundColor: AppTheme.getTheme().errorColor);
+                    }
+                    if (!_validName) {
+                      showSnackbar("Please enter a valid name.",
+                          backgroundColor: AppTheme.getTheme().errorColor);
+                    }
+                    if (_validEmail && _validName) {
+                      if (_name != state.user!.name ||
+                          _email != state.user!.email) {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        await state.updateUser(_email, _name);
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      }
                     }
                   },
                   child: Container(

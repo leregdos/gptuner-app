@@ -61,8 +61,9 @@ class AuthState with ChangeNotifier {
         user = User.fromJson(jsonDecode(response.body)['user']);
       }
       return true;
+    } else {
+      showSnackbarOnServerExceptions(response.statusCode);
     }
-    showSnackbarOnServerExceptions(response.statusCode);
     notifyListeners();
     return false;
   }
@@ -154,8 +155,9 @@ class AuthState with ChangeNotifier {
       showSnackbar("Account updated successfully.",
           backgroundColor: Colors.green);
       notifyListeners();
+    } else {
+      showSnackbarOnServerExceptions(response.statusCode);
     }
-    showSnackbarOnServerExceptions(response.statusCode);
   }
 
   Future<bool> updatePassword(

@@ -8,6 +8,19 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+bool emailValidatorBool(String? value) {
+  if (value == null || value.isEmpty) {
+    return false;
+  }
+  String pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$';
+  RegExp regex = RegExp(pattern);
+  if (!regex.hasMatch(value)) {
+    return false;
+  }
+
+  return true;
+}
+
 String? emailValidator(String? value) {
   if (value == null || value.isEmpty) {
     return "Please enter your email";

@@ -67,8 +67,9 @@ class DocumentState with ChangeNotifier {
         _promptListForAnswering = [];
         _noAvailablePromptForAnswering = true;
         notifyListeners();
+      } else {
+        showSnackbarOnServerExceptions(response.statusCode);
       }
-      showSnackbarOnServerExceptions(response.statusCode);
     }
   }
 
@@ -88,8 +89,9 @@ class DocumentState with ChangeNotifier {
       if (response.statusCode == 201) {
         showSnackbar("Demonstration submitted successfully.",
             backgroundColor: Colors.green);
+      } else {
+        showSnackbarOnServerExceptions(response.statusCode);
       }
-      showSnackbarOnServerExceptions(response.statusCode);
     }
   }
 
@@ -111,8 +113,9 @@ class DocumentState with ChangeNotifier {
         _promptListForValidation = [];
         _noAvailablePromptForValidation = true;
         notifyListeners();
+      } else {
+        showSnackbarOnServerExceptions(response.statusCode);
       }
-      showSnackbarOnServerExceptions(response.statusCode);
     }
   }
 
@@ -135,8 +138,9 @@ class DocumentState with ChangeNotifier {
         _answerPromptForValidation = {};
         _noAvailableAnswerForValidation = true;
         notifyListeners();
+      } else {
+        showSnackbarOnServerExceptions(response.statusCode);
       }
-      showSnackbarOnServerExceptions(response.statusCode);
     }
   }
 
@@ -173,8 +177,9 @@ class DocumentState with ChangeNotifier {
         }
       }
       notifyListeners();
+    } else {
+      showSnackbarOnServerExceptions(response.statusCode);
     }
-    showSnackbarOnServerExceptions(response.statusCode);
   }
 
   void removeReceivedPrompt() {
