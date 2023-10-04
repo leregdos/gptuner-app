@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gptuner/providers/auth_state.dart';
+import 'package:gptuner/providers/document_state.dart';
+import 'package:gptuner/shared/widgets/custom_loader.dart';
 import 'package:gptuner/theme/app_theme.dart';
+import 'package:provider/provider.dart';
 
 class ValidateSubmissionsScreen extends StatefulWidget {
   const ValidateSubmissionsScreen({super.key});
@@ -15,8 +19,18 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
 
   @override
   void initState() {
-    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      String? token = Provider.of<AuthState>(context, listen: false).token;
+      if (token != null) {
+        await Provider.of<DocumentState>(context, listen: false)
+            .getPromptsForValidation(token);
+        if (!mounted) return;
+        await Provider.of<DocumentState>(context, listen: false)
+            .getAnswersForValidation(token);
+      }
+    });
     _controller = TabController(length: 2, vsync: this);
+    super.initState();
   }
 
   @override
@@ -27,6 +41,7 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final documentState = Provider.of<DocumentState>(context, listen: true);
     return Scaffold(
       backgroundColor: AppTheme.getTheme().primaryColor,
       appBar: AppBar(
@@ -45,7 +60,7 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
             )),
             Tab(
                 child: Text(
-              'Answers',
+              'Demonstrations',
               style: AppTheme.getTheme().textTheme.subtitle1,
             )),
           ],
@@ -57,22 +72,113 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
             child: TabBarView(
               controller: _controller,
               children: [
-                Center(
-                    child: Card(
-                        child: Padding(
-                            padding: EdgeInsets.all(16),
-                            child: Text('Prompt Content')))),
-                Center(
-                    child: Card(
-                        child: Padding(
-                            padding: EdgeInsets.all(16),
-                            child: Text('Answer Content')))),
+                SingleChildScrollView(
+                  child: documentState.promptListForValidation.isEmpty
+                      ? Stack(
+                          children: [
+                            Positioned.fill(
+                              child: Container(
+                                  color: Colors.grey.withOpacity(0.7)),
+                            ),
+                            const Center(child: CustomLoader()),
+                          ],
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(height: 60),
+                            Card(
+                              color: Colors.grey[200],
+                              elevation: 10.0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(32.0),
+                                  child: Text(
+                                    documentState.promptListForValidation
+                                        .elementAt(0)
+                                        .content!,
+                                    style:
+                                        AppTheme.getTheme().textTheme.bodyText1,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                ),
+                SingleChildScrollView(
+                  child: documentState.answerPromptForValidation.isEmpty
+                      ? Stack(
+                          children: [
+                            Positioned.fill(
+                              child: Container(
+                                  color: Colors.grey.withOpacity(0.7)),
+                            ),
+                            const Center(child: CustomLoader()),
+                          ],
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(height: 20),
+                            Card(
+                              color: Colors.grey[200],
+                              elevation: 10.0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Text(
+                                    documentState
+                                        .answerPromptForValidation.values
+                                        .elementAt(0)
+                                        .content!,
+                                    style:
+                                        AppTheme.getTheme().textTheme.bodyText1,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 30),
+                            Card(
+                              color: Colors.grey[200],
+                              elevation: 10.0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Text(
+                                    documentState.answerPromptForValidation.keys
+                                        .elementAt(0)
+                                        .content!,
+                                    style:
+                                        AppTheme.getTheme().textTheme.bodyText1,
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                ),
               ],
             ),
           ),
           Padding(
-            padding:
-                const EdgeInsets.only(bottom: 20.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(
+                bottom: 20.0, left: 16.0, right: 16.0, top: 10.0),
             child: Row(
               children: [
                 InkWell(

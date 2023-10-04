@@ -1,19 +1,27 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gptuner/environment_config.dart';
+import 'package:gptuner/models/answer.dart';
 import 'package:gptuner/models/prompt.dart';
 import 'package:gptuner/shared/utils/functions.dart';
 import 'package:gptuner/theme/app_theme.dart';
 
 class DocumentState with ChangeNotifier {
   String hostUrl = EnvConfig.instance.hostUrl;
-  List<Prompt> _promptList = [];
-  bool _noAvailablePrompt = false;
-  // final List<Answer> _answerList = [];
+  bool _noAvailablePromptForAnswering = false;
+  bool _noAvailablePromptForValidation = false;
+  bool _noAvailableAnswerForValidation = false;
+  List<Prompt> _promptListForAnswering = [];
+  Map<Answer, Prompt> _answerPromptForValidation = {};
+  List<Prompt> _promptListForValidation = [];
 
-  List<Prompt> get promptList => _promptList;
-  bool get noAvailablePrompt => _noAvailablePrompt;
-  // List<Answer> get answerList => _answerList;
+  List<Prompt> get promptListForAnswering => _promptListForAnswering;
+  Map<Answer, Prompt> get answerPromptForValidation =>
+      _answerPromptForValidation;
+  List<Prompt> get promptListForValidation => _promptListForValidation;
+  bool get noAvailablePromptForAnswering => _noAvailablePromptForAnswering;
+  bool get noAvailablePromptForValidation => _noAvailablePromptForValidation;
+  bool get noAvailableAnswerForValidation => _noAvailableAnswerForValidation;
 
   Future<bool> submitPrompt(String userId, String token, String content) async {
     Map<String, String> body = {
@@ -42,13 +50,13 @@ class DocumentState with ChangeNotifier {
   }
 
   Future getPromptsForAnswering(String token) async {
-    if (!_noAvailablePrompt) {
+    if (!_noAvailablePromptForAnswering) {
       final response = await sendRequest(
           "api/v1/prompts/getPromptsForAnswering",
           headersAlt: {"Authorization": "Bearer $token"},
           hostUrl: hostUrl);
       if (response.statusCode == 200) {
-        _promptList =
+        _promptListForAnswering =
             List<Prompt>.from(jsonDecode(response.body)["prompts"].map(
           (prompt) {
             return Prompt.fromJson(prompt);
@@ -56,8 +64,8 @@ class DocumentState with ChangeNotifier {
         ));
         notifyListeners();
       } else if (response.statusCode == 404) {
-        _promptList = [];
-        _noAvailablePrompt = true;
+        _promptListForAnswering = [];
+        _noAvailablePromptForAnswering = true;
         notifyListeners();
       } else if (response.statusCode == 401) {
         showSnackbar("Authentication error. Please log out and log in again.",
@@ -69,13 +77,12 @@ class DocumentState with ChangeNotifier {
     }
   }
 
-  Future submitDemonstration(
-      String token, String userId, String content) async {
-    if (promptList.isNotEmpty) {
+  Future submitAnswer(String token, String userId, String content) async {
+    if (promptListForAnswering.isNotEmpty) {
       Map<String, String> body = {
         "content": content,
         "submittedUser": userId,
-        "associatedPrompt": promptList[0].uid!,
+        "associatedPrompt": promptListForAnswering[0].uid!,
       };
       removeReceivedPrompt();
       final response = await sendRequest("api/v1/answers/",
@@ -96,13 +103,70 @@ class DocumentState with ChangeNotifier {
     }
   }
 
+  Future getPromptsForValidation(String token) async {
+    if (!_noAvailablePromptForValidation && _promptListForAnswering.isEmpty) {
+      final response = await sendRequest(
+          "api/v1/prompts/getPromptsForValidation",
+          headersAlt: {"Authorization": "Bearer $token"},
+          hostUrl: hostUrl);
+      if (response.statusCode == 200) {
+        _promptListForValidation =
+            List<Prompt>.from(jsonDecode(response.body)["prompts"].map(
+          (prompt) {
+            return Prompt.fromJson(prompt);
+          },
+        ));
+        notifyListeners();
+      } else if (response.statusCode == 404) {
+        _promptListForValidation = [];
+        _noAvailablePromptForValidation = true;
+        notifyListeners();
+      } else if (response.statusCode == 401) {
+        showSnackbar("Authentication error. Please log out and log in again.",
+            backgroundColor: AppTheme.getTheme().errorColor);
+      } else {
+        showSnackbar("There has been a server error. Please try again later.",
+            backgroundColor: AppTheme.getTheme().errorColor);
+      }
+    }
+  }
+
+  Future getAnswersForValidation(String token) async {
+    if (!_noAvailableAnswerForValidation &&
+        _answerPromptForValidation.isEmpty) {
+      final response = await sendRequest(
+          "api/v1/answers/getAnswersForValidation",
+          headersAlt: {"Authorization": "Bearer $token"},
+          hostUrl: hostUrl);
+      if (response.statusCode == 200) {
+        var res = jsonDecode(response.body)["answers"];
+        for (int i = 0; i < res.length; i++) {
+          var answer = res[i];
+          _answerPromptForValidation[Answer.fromJson(answer)] =
+              Prompt.fromJson(answer["associatedPrompt"]);
+        }
+        notifyListeners();
+      } else if (response.statusCode == 404) {
+        _answerPromptForValidation = {};
+        _noAvailableAnswerForValidation = true;
+        notifyListeners();
+      } else if (response.statusCode == 401) {
+        showSnackbar("Authentication error. Please log out and log in again.",
+            backgroundColor: AppTheme.getTheme().errorColor);
+      } else {
+        showSnackbar("There has been a server error. Please try again later.",
+            backgroundColor: AppTheme.getTheme().errorColor);
+      }
+    }
+  }
+
   void removeReceivedPrompt() {
-    _promptList.removeAt(0);
+    _promptListForAnswering.removeAt(0);
     notifyListeners();
   }
 
   void reset() {
-    _promptList.clear();
-    _noAvailablePrompt = false;
+    _promptListForAnswering.clear();
+    _noAvailablePromptForAnswering = false;
   }
 }

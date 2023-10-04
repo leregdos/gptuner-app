@@ -33,7 +33,7 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
           duration: const Duration(milliseconds: 500));
       messages.clear();
       _textController.clear();
-      await documentState.submitDemonstration(
+      await documentState.submitAnswer(
           authState.token!, authState.user!.uid!, msg);
     }
   }
@@ -245,12 +245,12 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
         ),
       ),
       body: FutureBuilder(
-        future: documentState.promptList.isEmpty
+        future: documentState.promptListForAnswering.isEmpty
             ? documentState.getPromptsForAnswering(state.token!)
             : Future.value(null),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting &&
-              !documentState.noAvailablePrompt) {
+              !documentState.noAvailablePromptForAnswering) {
             return Stack(
               children: [
                 Positioned.fill(
@@ -267,8 +267,9 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
               ),
             );
           } else {
-            if (documentState.promptList.isNotEmpty && messages.isEmpty) {
-              messages.add(documentState.promptList.first.content!);
+            if (documentState.promptListForAnswering.isNotEmpty &&
+                messages.isEmpty) {
+              messages.add(documentState.promptListForAnswering.first.content!);
             }
             return buildMainContent();
           }
