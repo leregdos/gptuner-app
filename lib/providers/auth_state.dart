@@ -61,14 +61,8 @@ class AuthState with ChangeNotifier {
         user = User.fromJson(jsonDecode(response.body)['user']);
       }
       return true;
-    } else if (response.statusCode == 401) {
-      showSnackbar(
-          "There has been an authorization error. Please log in again.",
-          backgroundColor: AppTheme.getTheme().errorColor);
-    } else {
-      showSnackbar("There has been a server error. Please try again later.",
-          backgroundColor: AppTheme.getTheme().errorColor);
     }
+    showSnackbarOnServerExceptions(response.statusCode);
     notifyListeners();
     return false;
   }
@@ -160,13 +154,8 @@ class AuthState with ChangeNotifier {
       showSnackbar("Account updated successfully.",
           backgroundColor: Colors.green);
       notifyListeners();
-    } else if (response.statusCode == 401) {
-      showSnackbar("Authentication error. Please log out and log in again.",
-          backgroundColor: AppTheme.getTheme().errorColor);
-    } else {
-      showSnackbar("There has been a server error. Please try again later.",
-          backgroundColor: AppTheme.getTheme().errorColor);
     }
+    showSnackbarOnServerExceptions(response.statusCode);
   }
 
   Future<bool> updatePassword(

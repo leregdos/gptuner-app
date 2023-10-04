@@ -67,13 +67,8 @@ class DocumentState with ChangeNotifier {
         _promptListForAnswering = [];
         _noAvailablePromptForAnswering = true;
         notifyListeners();
-      } else if (response.statusCode == 401) {
-        showSnackbar("Authentication error. Please log out and log in again.",
-            backgroundColor: AppTheme.getTheme().errorColor);
-      } else {
-        showSnackbar("There has been a server error. Please try again later.",
-            backgroundColor: AppTheme.getTheme().errorColor);
       }
+      showSnackbarOnServerExceptions(response.statusCode);
     }
   }
 
@@ -93,13 +88,8 @@ class DocumentState with ChangeNotifier {
       if (response.statusCode == 201) {
         showSnackbar("Demonstration submitted successfully.",
             backgroundColor: Colors.green);
-      } else if (response.statusCode == 401) {
-        showSnackbar("Authentication error. Please log out and log in again.",
-            backgroundColor: AppTheme.getTheme().errorColor);
-      } else {
-        showSnackbar("There has been a server error. Please try again later.",
-            backgroundColor: AppTheme.getTheme().errorColor);
       }
+      showSnackbarOnServerExceptions(response.statusCode);
     }
   }
 
@@ -121,13 +111,8 @@ class DocumentState with ChangeNotifier {
         _promptListForValidation = [];
         _noAvailablePromptForValidation = true;
         notifyListeners();
-      } else if (response.statusCode == 401) {
-        showSnackbar("Authentication error. Please log out and log in again.",
-            backgroundColor: AppTheme.getTheme().errorColor);
-      } else {
-        showSnackbar("There has been a server error. Please try again later.",
-            backgroundColor: AppTheme.getTheme().errorColor);
       }
+      showSnackbarOnServerExceptions(response.statusCode);
     }
   }
 
@@ -150,13 +135,8 @@ class DocumentState with ChangeNotifier {
         _answerPromptForValidation = {};
         _noAvailableAnswerForValidation = true;
         notifyListeners();
-      } else if (response.statusCode == 401) {
-        showSnackbar("Authentication error. Please log out and log in again.",
-            backgroundColor: AppTheme.getTheme().errorColor);
-      } else {
-        showSnackbar("There has been a server error. Please try again later.",
-            backgroundColor: AppTheme.getTheme().errorColor);
       }
+      showSnackbarOnServerExceptions(response.statusCode);
     }
   }
 
@@ -193,13 +173,8 @@ class DocumentState with ChangeNotifier {
         }
       }
       notifyListeners();
-    } else if (response.statusCode == 401) {
-      showSnackbar("Authentication error. Please log out and log in again.",
-          backgroundColor: AppTheme.getTheme().errorColor);
-    } else {
-      showSnackbar("There has been a server error. Please try again later.",
-          backgroundColor: AppTheme.getTheme().errorColor);
     }
+    showSnackbarOnServerExceptions(response.statusCode);
   }
 
   void removeReceivedPrompt() {

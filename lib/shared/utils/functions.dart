@@ -221,3 +221,13 @@ PageRouteBuilder customPageRoute(Widget page) {
     },
   );
 }
+
+void showSnackbarOnServerExceptions(int statusCode) {
+  if (statusCode == 401) {
+    showSnackbar("Authentication error. Please log out and log in again.",
+        backgroundColor: AppTheme.getTheme().errorColor);
+  } else {
+    showSnackbar("There has been a server error. Please try again later.",
+        backgroundColor: AppTheme.getTheme().errorColor);
+  }
+}
