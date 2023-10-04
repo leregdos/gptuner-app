@@ -14,8 +14,28 @@ class ValidateSubmissionsScreen extends StatefulWidget {
 }
 
 class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late TabController _controller;
+  late Animation<double> _invalidButtonAnimation;
+  late Animation<double> _validButtonAnimation;
+  late AnimationController _invalidButtonController;
+  late AnimationController _validButtonController;
+
+  Future _handleValidation(int validated, BuildContext context) async {
+    AnimationController buttonController =
+        validated == 0 ? _invalidButtonController : _validButtonController;
+
+    buttonController.forward().then((_) async {
+      await Future.delayed(const Duration(milliseconds: 200)); // Small delay
+      buttonController.reverse();
+      if (!mounted) return;
+      String? token = Provider.of<AuthState>(context, listen: false).token;
+      if (token != null) {
+        await Provider.of<DocumentState>(context, listen: false)
+            .validateSubmission(token, validated, _controller.index);
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -30,12 +50,27 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
       }
     });
     _controller = TabController(length: 2, vsync: this);
+    _invalidButtonController = AnimationController(
+      duration: const Duration(milliseconds: 60),
+      vsync: this,
+    );
+
+    _validButtonController = AnimationController(
+      duration: const Duration(milliseconds: 60),
+      vsync: this,
+    );
+
+    _invalidButtonAnimation =
+        Tween<double>(begin: 1, end: 1.15).animate(_invalidButtonController);
+    _validButtonAnimation =
+        Tween<double>(begin: 1, end: 1.15).animate(_validButtonController);
     super.initState();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _invalidButtonController.dispose();
+    _validButtonController.dispose();
     super.dispose();
   }
 
@@ -239,58 +274,62 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
                       bottom: 20.0, left: 16.0, right: 16.0, top: 10.0),
                   child: Row(
                     children: [
-                      InkWell(
-                        onTap: () async {
-                          await documentState.validateSubmission(
-                              authState.token!, 0, _controller.index);
-                        },
-                        child: Container(
-                          constraints: const BoxConstraints(
-                              minWidth: 150, maxWidth: double.infinity),
-                          padding: const EdgeInsets.symmetric(vertical: 18.0),
-                          decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 1,
-                                  blurRadius: 3,
-                                  offset: const Offset(0, 3),
-                                )
-                              ],
-                              borderRadius: BorderRadius.circular(17.0),
-                              color: AppTheme.getTheme().errorColor),
-                          child: Text(
-                            "Invalid",
-                            textAlign: TextAlign.center,
-                            style: AppTheme.getTheme().textTheme.labelLarge,
+                      ScaleTransition(
+                        scale: _invalidButtonAnimation,
+                        child: InkWell(
+                          onTap: () async {
+                            await _handleValidation(0, context);
+                          },
+                          child: Container(
+                            constraints: const BoxConstraints(
+                                minWidth: 150, maxWidth: double.infinity),
+                            padding: const EdgeInsets.symmetric(vertical: 18.0),
+                            decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 1,
+                                    blurRadius: 3,
+                                    offset: const Offset(0, 3),
+                                  )
+                                ],
+                                borderRadius: BorderRadius.circular(17.0),
+                                color: AppTheme.getTheme().errorColor),
+                            child: Text(
+                              "Invalid",
+                              textAlign: TextAlign.center,
+                              style: AppTheme.getTheme().textTheme.labelLarge,
+                            ),
                           ),
                         ),
                       ),
                       const Spacer(),
-                      InkWell(
-                        onTap: () async {
-                          await documentState.validateSubmission(
-                              authState.token!, 1, _controller.index);
-                        },
-                        child: Container(
-                          constraints: const BoxConstraints(
-                              minWidth: 150, maxWidth: double.infinity),
-                          padding: const EdgeInsets.symmetric(vertical: 18.0),
-                          decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 1,
-                                  blurRadius: 3,
-                                  offset: const Offset(0, 3),
-                                )
-                              ],
-                              borderRadius: BorderRadius.circular(17.0),
-                              color: Colors.green),
-                          child: Text(
-                            "Valid",
-                            textAlign: TextAlign.center,
-                            style: AppTheme.getTheme().textTheme.labelLarge,
+                      ScaleTransition(
+                        scale: _validButtonAnimation,
+                        child: InkWell(
+                          onTap: () async {
+                            await _handleValidation(1, context);
+                          },
+                          child: Container(
+                            constraints: const BoxConstraints(
+                                minWidth: 150, maxWidth: double.infinity),
+                            padding: const EdgeInsets.symmetric(vertical: 18.0),
+                            decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 1,
+                                    blurRadius: 3,
+                                    offset: const Offset(0, 3),
+                                  )
+                                ],
+                                borderRadius: BorderRadius.circular(17.0),
+                                color: Colors.green),
+                            child: Text(
+                              "Valid",
+                              textAlign: TextAlign.center,
+                              style: AppTheme.getTheme().textTheme.labelLarge,
+                            ),
                           ),
                         ),
                       ),
