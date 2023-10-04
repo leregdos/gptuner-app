@@ -160,6 +160,48 @@ class DocumentState with ChangeNotifier {
     }
   }
 
+  Future validateSubmission(String token, int validated, int index) async {
+    String id = index == 0
+        ? promptListForValidation[0].uid!
+        : answerPromptForValidation.keys.first.uid!;
+    dynamic response;
+    Map<String, bool> body = {"validated": validated == 1};
+    if (index == 0) {
+      response = await sendRequest("api/v1/prompts/validate/$id",
+          headersAlt: {"Authorization": "Bearer $token"},
+          hostUrl: hostUrl,
+          method: 'POST',
+          body: body);
+    } else {
+      response = await sendRequest("api/v1/answers/validate/$id",
+          headersAlt: {"Authorization": "Bearer $token"},
+          hostUrl: hostUrl,
+          method: 'POST',
+          body: body);
+    }
+    if (response.statusCode == 200) {
+      if (index == 0) {
+        _promptListForValidation.removeAt(0);
+        if (_promptListForAnswering.isEmpty) {
+          await getPromptsForValidation(token);
+        }
+      } else {
+        _answerPromptForValidation
+            .remove(_answerPromptForValidation.keys.first);
+        if (_answerPromptForValidation.isEmpty) {
+          await getAnswersForValidation(token);
+        }
+      }
+      notifyListeners();
+    } else if (response.statusCode == 401) {
+      showSnackbar("Authentication error. Please log out and log in again.",
+          backgroundColor: AppTheme.getTheme().errorColor);
+    } else {
+      showSnackbar("There has been a server error. Please try again later.",
+          backgroundColor: AppTheme.getTheme().errorColor);
+    }
+  }
+
   void removeReceivedPrompt() {
     _promptListForAnswering.removeAt(0);
     notifyListeners();
