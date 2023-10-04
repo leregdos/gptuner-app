@@ -203,7 +203,7 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
                     child: Text(
                       "Invalid",
                       textAlign: TextAlign.center,
-                      style: AppTheme.getTheme().textTheme.bodyText1,
+                      style: AppTheme.getTheme().textTheme.labelLarge,
                     ),
                   ),
                 ),
@@ -230,7 +230,7 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
                     child: Text(
                       "Valid",
                       textAlign: TextAlign.center,
-                      style: AppTheme.getTheme().textTheme.bodyText1,
+                      style: AppTheme.getTheme().textTheme.labelLarge,
                     ),
                   ),
                 ),
