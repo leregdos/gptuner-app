@@ -189,6 +189,10 @@ class DocumentState with ChangeNotifier {
 
   void reset() {
     _promptListForAnswering.clear();
+    _answerPromptForValidation.clear();
+    _promptListForValidation.clear();
+    _noAvailableAnswerForValidation = false;
+    _noAvailablePromptForValidation = false;
     _noAvailablePromptForAnswering = false;
   }
 }
