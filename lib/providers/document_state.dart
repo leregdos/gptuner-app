@@ -95,7 +95,7 @@ class DocumentState with ChangeNotifier {
     }
   }
 
-  Future getPromptsForValidation(String token) async {
+  Future getPromptsForValidation(String? token) async {
     if (!_noAvailablePromptForValidation && _promptListForAnswering.isEmpty) {
       final response = await sendRequest(
           "api/v1/prompts/getPromptsForValidation",
@@ -119,7 +119,7 @@ class DocumentState with ChangeNotifier {
     }
   }
 
-  Future getAnswersForValidation(String token) async {
+  Future getAnswersForValidation(String? token) async {
     if (!_noAvailableAnswerForValidation &&
         _answerPromptForValidation.isEmpty) {
       final response = await sendRequest(

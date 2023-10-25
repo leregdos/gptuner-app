@@ -244,37 +244,40 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
           style: AppTheme.getTheme().textTheme.headline3,
         ),
       ),
-      body: FutureBuilder(
-        future: documentState.promptListForAnswering.isEmpty
-            ? documentState.getPromptsForAnswering(state.token!)
-            : Future.value(null),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting &&
-              !documentState.noAvailablePromptForAnswering) {
-            return Stack(
-              children: [
-                Positioned.fill(
-                  child: Container(color: Colors.grey.withOpacity(0.7)),
-                ),
-                const Center(child: CustomLoader()),
-              ],
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                'There has been an error, please try again.',
-                style: AppTheme.getTheme().textTheme.subtitle1,
-              ),
-            );
-          } else {
-            if (documentState.promptListForAnswering.isNotEmpty &&
-                messages.isEmpty) {
-              messages.add(documentState.promptListForAnswering.first.content!);
-            }
-            return buildMainContent();
-          }
-        },
-      ),
+      body: state.token != null
+          ? FutureBuilder(
+              future: documentState.promptListForAnswering.isEmpty
+                  ? documentState.getPromptsForAnswering(state.token!)
+                  : Future.value(null),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting &&
+                    !documentState.noAvailablePromptForAnswering) {
+                  return Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Container(color: Colors.grey.withOpacity(0.7)),
+                      ),
+                      const Center(child: CustomLoader()),
+                    ],
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      'There has been an error, please try again.',
+                      style: AppTheme.getTheme().textTheme.subtitle1,
+                    ),
+                  );
+                } else {
+                  if (documentState.promptListForAnswering.isNotEmpty &&
+                      messages.isEmpty) {
+                    messages.add(
+                        documentState.promptListForAnswering.first.content!);
+                  }
+                  return buildMainContent();
+                }
+              },
+            )
+          : Container(),
     );
   }
 }

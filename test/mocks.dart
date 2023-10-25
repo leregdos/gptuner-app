@@ -1,3 +1,6 @@
+import 'package:gptuner/models/answer.dart';
+import 'package:gptuner/models/prompt.dart';
+import 'package:gptuner/providers/document_state.dart';
 import 'package:http/http.dart';
 import 'package:mockito/mockito.dart';
 import 'package:gptuner/providers/auth_state.dart';
@@ -34,6 +37,14 @@ class MockAuthState extends Mock implements AuthState {
       returnValue: true, // Default value
     );
   }
+
+  @override
+  String? get token {
+    return super.noSuchMethod(
+      Invocation.method(#token, []),
+      returnValue: "token", // Default value
+    );
+  }
 }
 
 class MockSharedPreferences extends Mock implements SharedPreferences {
@@ -44,4 +55,50 @@ class MockSharedPreferences extends Mock implements SharedPreferences {
       );
 }
 
-class MockHttpResponse extends Mock implements Response {}
+class MockDocumentState extends Mock implements DocumentState {
+  @override
+  List<Prompt> get promptListForValidation {
+    return super.noSuchMethod(
+      Invocation.method(#promptListForValidation, []),
+      returnValue: <Prompt>[], // Default value
+    );
+  }
+
+  @override
+  Map<Answer, Prompt> get answerPromptForValidation {
+    return super.noSuchMethod(
+      Invocation.method(#answerPromptForValidation, []),
+      returnValue: <Answer, Prompt>{}, // Default value
+    );
+  }
+
+  @override
+  bool get noAvailablePromptForValidation {
+    return super.noSuchMethod(
+      Invocation.method(#noAvailablePromptForValidation, []),
+      returnValue: true, // Default value
+    );
+  }
+
+  @override
+  bool get noAvailableAnswerForValidation {
+    return super.noSuchMethod(
+      Invocation.method(#noAvailableAnswerForValidation, []),
+      returnValue: true, // Default value
+    );
+  }
+
+  @override
+  Future getPromptsForValidation(String? token) async {
+    return super.noSuchMethod(
+      Invocation.method(#getPromptsForValidation, [token]),
+    );
+  }
+
+  @override
+  Future getAnswersForValidation(String? token) async {
+    return super.noSuchMethod(
+      Invocation.method(#getAnswersForValidation, [token]),
+    );
+  }
+}
