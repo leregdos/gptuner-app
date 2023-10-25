@@ -101,4 +101,13 @@ class MockDocumentState extends Mock implements DocumentState {
       Invocation.method(#getAnswersForValidation, [token]),
     );
   }
+
+  @override
+  Future<bool> submitPrompt(
+      String? userId, String? token, String? content) async {
+    return super.noSuchMethod(
+      Invocation.method(#submitPrompt, [userId, token, content]),
+      returnValue: Future.value(true), // Default value
+    );
+  }
 }

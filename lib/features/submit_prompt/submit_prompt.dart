@@ -108,6 +108,7 @@ class _SubmitPromptScreenState extends State<SubmitPromptScreen> {
                     }
                   },
                   child: Container(
+                    key: const Key("submitButtonContainer"),
                     constraints: const BoxConstraints(
                         minWidth: 200, maxWidth: double.infinity),
                     padding: const EdgeInsets.symmetric(
@@ -143,8 +144,9 @@ class _SubmitPromptScreenState extends State<SubmitPromptScreen> {
           ),
         ),
         Center(
-            child:
-                Visibility(visible: _isLoading, child: const CustomLoader())),
+            child: Visibility(
+                visible: _isLoading,
+                child: const CustomLoader(key: Key("customLoader")))),
       ]),
     );
   }

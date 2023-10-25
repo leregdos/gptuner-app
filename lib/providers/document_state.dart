@@ -23,11 +23,15 @@ class DocumentState with ChangeNotifier {
   bool get noAvailablePromptForValidation => _noAvailablePromptForValidation;
   bool get noAvailableAnswerForValidation => _noAvailableAnswerForValidation;
 
-  Future<bool> submitPrompt(String userId, String token, String content) async {
-    Map<String, String> body = {
-      "content": content,
-      "submittedUser": userId,
-    };
+  Future<bool> submitPrompt(
+      String? userId, String? token, String? content) async {
+    Map<String, String> body = {};
+    if (userId != null && content != null) {
+      body = {
+        "content": content,
+        "submittedUser": userId,
+      };
+    }
     final response = await sendRequest("api/v1/prompts/",
         method: "POST",
         body: body,
