@@ -108,10 +108,10 @@ class AuthState with ChangeNotifier {
     }
   }
 
-  Future<void> login(String email, String password) async {
+  Future<void> login(String? email, String? password) async {
     Map<String, String> body = {
-      'email': email,
-      'password': password,
+      'email': email!,
+      'password': password!,
     };
     final response = await sendRequest("api/v1/users/login",
         method: "POST", body: body, hostUrl: hostUrl);

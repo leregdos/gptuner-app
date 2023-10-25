@@ -69,6 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 50.0),
                         TextFormField(
+                            key: const Key("emailField"),
                             onChanged: (value) => _updateFormValidation(),
                             validator: emailValidator,
                             autovalidateMode:
@@ -105,6 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: AppTheme.getTheme().textTheme.subtitle2),
                         const SizedBox(height: 16.0),
                         TextFormField(
+                            key: const Key("passwordField"),
                             validator: (val) {
                               if (val == null || val.isEmpty) {
                                 return "Please enter your password";
