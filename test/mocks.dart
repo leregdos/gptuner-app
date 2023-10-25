@@ -20,6 +20,14 @@ class MockAuthState extends Mock implements AuthState {
   }
 
   @override
+  Future<void> signup(String? email, String? password, String? name,
+      String? passwordConfirm) async {
+    return super.noSuchMethod(
+      Invocation.method(#signup, [email, password, name, passwordConfirm]),
+    );
+  }
+
+  @override
   bool get isAuthenticated {
     return super.noSuchMethod(
       Invocation.method(#tryAutoLogin, []),

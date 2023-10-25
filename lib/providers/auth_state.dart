@@ -68,13 +68,13 @@ class AuthState with ChangeNotifier {
     return false;
   }
 
-  Future<void> signup(String email, String password, String name,
-      String passwordConfirm) async {
+  Future<void> signup(String? email, String? password, String? name,
+      String? passwordConfirm) async {
     Map<String, String> body = {
-      'email': email,
-      'password': password,
-      'name': name,
-      'passwordConfirm': passwordConfirm
+      'email': email!,
+      'password': password!,
+      'name': name!,
+      'passwordConfirm': passwordConfirm!
     };
     final response = await sendRequest("api/v1/users/signup",
         method: "POST", body: body, hostUrl: hostUrl);
