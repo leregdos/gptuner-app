@@ -9,12 +9,10 @@ import 'mocks.dart';
 void main() {
   late MockAuthState mockAuthState;
   late MockSharedPreferences mockSharedPreferences;
-  late MockHttpResponse mockResponse;
 
   setUp(() {
     mockAuthState = MockAuthState();
     mockSharedPreferences = MockSharedPreferences();
-    mockResponse = MockHttpResponse();
 
     when(mockSharedPreferences.containsKey('jwtToken')).thenReturn(false);
     when(mockSharedPreferences.containsKey('expiryDate')).thenReturn(false);
