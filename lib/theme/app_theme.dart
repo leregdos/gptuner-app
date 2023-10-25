@@ -21,10 +21,10 @@ class AppTheme {
           letterSpacing: -0.333),
       headline1: base.headline1!.copyWith(
           fontFamily: fontName2,
-          fontSize: 20,
+          fontSize: 18,
           color: const Color(0xFFFFFFFF),
           letterSpacing: -0.333,
-          fontWeight: FontWeight.w500),
+          fontWeight: FontWeight.w600),
       headline2: base.headline2!.copyWith(
           fontFamily: fontName2, fontSize: 48, fontWeight: FontWeight.w500),
       headline3: base.headline3!.copyWith(
@@ -36,19 +36,18 @@ class AppTheme {
       headline4: base.headline4!.copyWith(
         fontFamily: fontName2,
         fontSize: 15,
-        letterSpacing: -0.333,
         fontWeight: FontWeight.w500,
       ),
       headline5: base.headline5!.copyWith(
           fontFamily: fontName2,
           fontSize: 20,
           color: const Color(0xFFFFFFFF),
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w500,
           letterSpacing: -0.333),
       headline6: base.headline6!.copyWith(
           fontFamily: fontName2,
           fontSize: 20,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           letterSpacing: -0.333),
       subtitle1: base.subtitle1!.copyWith(fontFamily: fontName2, fontSize: 14),
       // don't touch below
@@ -63,7 +62,7 @@ class AppTheme {
           fontFamily: fontName2,
           fontSize: 12,
           color: Colors.grey,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w500,
           letterSpacing: -0.333),
       overline: base.overline!.copyWith(fontFamily: fontName2),
       labelMedium: base.labelMedium!.copyWith(
