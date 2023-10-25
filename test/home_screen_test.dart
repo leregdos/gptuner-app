@@ -47,6 +47,7 @@ void main() {
       expect(find.text('Submit Prompt'), findsOneWidget);
       expect(find.text('Submit Demonstration'), findsOneWidget);
       expect(find.text('Validate Submissions'), findsOneWidget);
+      expect(find.byType(IconButton), findsOneWidget);
     });
 
     testWidgets(
@@ -112,6 +113,26 @@ void main() {
       await tester.pump(const Duration(seconds: 10));
 
       expect(find.text('Validate Submissions'), findsOneWidget);
+    });
+
+    testWidgets('opens drawer when icon button is pressed',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (_) => AuthState()),
+            ChangeNotifierProvider(create: (_) => DocumentState()),
+          ],
+          child: MaterialApp(
+            theme: AppTheme.getTheme(),
+            home: const HomeScreen(),
+          ),
+        ),
+      );
+      await tester.tap(find.byType(IconButton));
+      await tester.pump();
+
+      expect(find.byType(Drawer), findsOneWidget);
     });
   });
 }
