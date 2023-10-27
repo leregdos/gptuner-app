@@ -10,14 +10,14 @@ class EnvConfig {
     switch (backendEnvironment) {
       case 'development':
         {
-          hostUrl = "http://127.0.0.1:3000/";
+          hostUrl = "https://gptuner-db624d447bc6.herokuapp.com/";
         }
         break;
 
       case 'production':
       default:
         {
-          hostUrl = "https://gptuner.herokuapp.com";
+          hostUrl = "https://gptuner-db624d447bc6.herokuapp.com/";
         }
     }
   }
