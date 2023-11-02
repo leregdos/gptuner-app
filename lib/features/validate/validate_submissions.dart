@@ -77,6 +77,133 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
   @override
   Widget build(BuildContext context) {
     final documentState = Provider.of<DocumentState>(context, listen: true);
+    Widget _buildLoader() {
+      return Center(
+        child: Container(
+          color: Colors.grey.withOpacity(0.7),
+          child: const CustomLoader(),
+        ),
+      );
+    }
+
+    Widget _buildNoAvailableDataMessage(String message) {
+      return Center(
+        child: Card(
+          color: Colors.grey.shade400,
+          elevation: 10.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Text(
+                message,
+                textAlign: TextAlign.center,
+                style: AppTheme.getTheme().textTheme.subtitle1,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    Widget _buildPromptsTab() {
+      if (documentState.noAvailablePromptForValidation) {
+        return _buildNoAvailableDataMessage(
+            "There are no prompts to validate at this time. Please check back later.");
+      }
+
+      if (documentState.promptListForValidation.isEmpty) {
+        return _buildLoader();
+      }
+      return SingleChildScrollView(
+          child: Column(
+        children: [
+          const SizedBox(height: 60),
+          Card(
+            color: Colors.grey[200],
+            elevation: 10.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: Text(
+                  documentState.promptListForValidation.elementAt(0).content!,
+                  style: AppTheme.getTheme().textTheme.bodyText1,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ));
+    }
+
+    Widget _buildDemonstrationsTab() {
+      if (documentState.noAvailableAnswerForValidation) {
+        return _buildNoAvailableDataMessage(
+            "There are no demonstrations to validate at this time. Please check back later.");
+      }
+
+      if (documentState.answerPromptForValidation.isEmpty) {
+        return _buildLoader();
+      }
+      return SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 20),
+            Card(
+              color: Colors.grey[200],
+              elevation: 10.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text(
+                    documentState.answerPromptForValidation.values
+                        .elementAt(0)
+                        .content!,
+                    style: AppTheme.getTheme().textTheme.bodyText1,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 30),
+            Card(
+              color: Colors.grey[200],
+              elevation: 10.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    documentState.answerPromptForValidation.keys
+                        .elementAt(0)
+                        .content!,
+                    style: AppTheme.getTheme().textTheme.bodyText1,
+                    textAlign: TextAlign.start,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: AppTheme.getTheme().primaryColor,
       appBar: AppBar(
@@ -110,174 +237,8 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
             child: TabBarView(
               controller: _controller,
               children: [
-                documentState.noAvailablePromptForValidation
-                    ? Center(
-                        child: Card(
-                          color: Colors.grey.shade400,
-                          elevation: 10.0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            child: Padding(
-                              padding: const EdgeInsets.all(32.0),
-                              child: Text(
-                                "There are no prompts to validate at this time. Please check back later.",
-                                textAlign: TextAlign.center,
-                                style: AppTheme.getTheme().textTheme.subtitle1,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    : LayoutBuilder(builder: (context, constraints) {
-                        return documentState.promptListForValidation.isEmpty &&
-                                !documentState.noAvailablePromptForValidation
-                            ? ConstrainedBox(
-                                constraints: BoxConstraints(
-                                  minHeight: constraints.maxHeight,
-                                  minWidth: constraints.maxWidth,
-                                ),
-                                child: IntrinsicHeight(
-                                  child: Container(
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    color: Colors.grey.withOpacity(0.7),
-                                    child: const Center(child: CustomLoader()),
-                                  ),
-                                ),
-                              )
-                            : SingleChildScrollView(
-                                child: Column(
-                                children: [
-                                  const SizedBox(height: 60),
-                                  Card(
-                                    color: Colors.grey[200],
-                                    elevation: 10.0,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    child: SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.8,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(32.0),
-                                        child: Text(
-                                          documentState.promptListForValidation
-                                              .elementAt(0)
-                                              .content!,
-                                          style: AppTheme.getTheme()
-                                              .textTheme
-                                              .bodyText1,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ));
-                      }),
-                documentState.noAvailableAnswerForValidation
-                    ? Center(
-                        child: Card(
-                          color: Colors.grey.shade400,
-                          elevation: 10.0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            child: Padding(
-                              padding: const EdgeInsets.all(32.0),
-                              child: Text(
-                                "There are no demonstrations to validate at this time. Please check back later.",
-                                textAlign: TextAlign.center,
-                                style: AppTheme.getTheme().textTheme.subtitle1,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    : LayoutBuilder(builder: (context, constraints) {
-                        return documentState
-                                    .answerPromptForValidation.isEmpty &&
-                                !documentState.noAvailableAnswerForValidation
-                            ? ConstrainedBox(
-                                constraints: BoxConstraints(
-                                  minHeight: constraints.maxHeight,
-                                  minWidth: constraints.maxWidth,
-                                ),
-                                child: IntrinsicHeight(
-                                  child: Container(
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    color: Colors.grey.withOpacity(0.7),
-                                    child: const Center(child: CustomLoader()),
-                                  ),
-                                ),
-                              )
-                            : SingleChildScrollView(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const SizedBox(height: 20),
-                                    Card(
-                                      color: Colors.grey[200],
-                                      elevation: 10.0,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
-                                      child: SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.8,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(20.0),
-                                          child: Text(
-                                            documentState
-                                                .answerPromptForValidation
-                                                .values
-                                                .elementAt(0)
-                                                .content!,
-                                            style: AppTheme.getTheme()
-                                                .textTheme
-                                                .bodyText1,
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 30),
-                                    Card(
-                                      color: Colors.grey[200],
-                                      elevation: 10.0,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
-                                      child: SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.8,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(10.0),
-                                          child: Text(
-                                            documentState
-                                                .answerPromptForValidation.keys
-                                                .elementAt(0)
-                                                .content!,
-                                            style: AppTheme.getTheme()
-                                                .textTheme
-                                                .bodyText1,
-                                            textAlign: TextAlign.start,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                      })
+                _buildPromptsTab(),
+                _buildDemonstrationsTab(),
               ],
             ),
           ),
