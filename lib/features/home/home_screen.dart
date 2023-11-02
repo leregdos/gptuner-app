@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
       onWillPop: () async => false,
       child: Scaffold(
         drawer: buildSidebar(state, context, documentState),
-        backgroundColor: AppTheme.getTheme().backgroundColor,
+        backgroundColor: AppTheme.getTheme().colorScheme.background,
         appBar: AppBar(
           leading: Builder(
             builder: (context) => IconButton(
@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Text(
                 "Welcome to GPTuner",
-                style: AppTheme.getTheme().textTheme.headline6,
+                style: AppTheme.getTheme().textTheme.titleLarge,
               ),
               const SizedBox(
                 height: 50,
@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Center(
                   child: Text(
                     title,
-                    style: AppTheme.getTheme().textTheme.headline5,
+                    style: AppTheme.getTheme().textTheme.headlineSmall,
                     overflow: TextOverflow.visible,
                     textAlign: TextAlign.center,
                   ),

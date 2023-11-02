@@ -44,11 +44,11 @@ class DocumentState with ChangeNotifier {
       return true;
     } else if (response.statusCode == 401) {
       showSnackbar("Authentication error. Please log out and log in again.",
-          backgroundColor: AppTheme.getTheme().errorColor);
+          backgroundColor: AppTheme.getTheme().colorScheme.error);
       return false;
     } else {
       showSnackbar("There has been a server error. Please try again later.",
-          backgroundColor: AppTheme.getTheme().errorColor);
+          backgroundColor: AppTheme.getTheme().colorScheme.error);
       return false;
     }
   }

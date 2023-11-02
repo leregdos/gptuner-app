@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final state = Provider.of<AuthState>(context, listen: false);
     return Scaffold(
-      backgroundColor: AppTheme.getTheme().backgroundColor,
+      backgroundColor: AppTheme.getTheme().colorScheme.background,
       body: Stack(
         children: [
           Center(
@@ -62,10 +62,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        // const SizedBox(height: 50.0),
                         Text(
                           "Sign In",
-                          style: AppTheme.getTheme().textTheme.headline3,
+                          style: AppTheme.getTheme().textTheme.displaySmall,
                         ),
                         const SizedBox(height: 50.0),
                         TextFormField(
@@ -103,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   .grey[200], // This gives it a gray background
                             ),
                             keyboardType: TextInputType.emailAddress,
-                            style: AppTheme.getTheme().textTheme.subtitle2),
+                            style: AppTheme.getTheme().textTheme.titleSmall),
                         const SizedBox(height: 16.0),
                         TextFormField(
                             key: const Key("passwordField"),
@@ -145,8 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   .grey[200], // This gives it a gray background
                             ),
                             obscureText: _obscureText,
-                            style: AppTheme.getTheme().textTheme.subtitle2),
-
+                            style: AppTheme.getTheme().textTheme.titleSmall),
                         Padding(
                           padding:
                               const EdgeInsets.only(top: 18.0, bottom: 12.0),
@@ -167,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Text(
                                     "Show/Hide password",
                                     style:
-                                        AppTheme.getTheme().textTheme.caption,
+                                        AppTheme.getTheme().textTheme.bodySmall,
                                   )
                                 ],
                               ),
@@ -213,12 +211,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ],
                                 borderRadius: BorderRadius.circular(17.0),
                                 color: _isValidForm
-                                    ? AppTheme.getTheme().backgroundColor
+                                    ? AppTheme.getTheme().colorScheme.background
                                     : AppTheme.getTheme().disabledColor),
                             child: Center(
                               child: Text(
                                 "Login",
-                                style: AppTheme.getTheme().textTheme.headline4,
+                                style: AppTheme.getTheme()
+                                    .textTheme
+                                    .headlineMedium,
                               ),
                             ),
                           ),
@@ -230,7 +230,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             onTap: () {},
                             child: Text(
                               "Forgot Password?",
-                              style: AppTheme.getTheme().textTheme.caption,
+                              style: AppTheme.getTheme().textTheme.bodySmall,
                             ),
                           ),
                         ),
@@ -242,7 +242,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             children: [
                               Text(
                                 "Don't have an account?",
-                                style: AppTheme.getTheme().textTheme.subtitle2,
+                                style: AppTheme.getTheme().textTheme.titleSmall,
                               ),
                               const SizedBox(width: 5.0),
                               InkWell(
@@ -253,7 +253,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Text(
                                   "Sign Up",
                                   style:
-                                      AppTheme.getTheme().textTheme.bodyText2,
+                                      AppTheme.getTheme().textTheme.bodyMedium,
                                 ),
                               ),
                             ],

@@ -23,10 +23,10 @@ class _SubmitPromptScreenState extends State<SubmitPromptScreen> {
     return Scaffold(
       backgroundColor: AppTheme.getTheme().primaryColor,
       appBar: AppBar(
-        backgroundColor: AppTheme.getTheme().backgroundColor,
+        backgroundColor: AppTheme.getTheme().colorScheme.background,
         title: Text(
           'Prompt Submission',
-          style: AppTheme.getTheme().textTheme.headline3,
+          style: AppTheme.getTheme().textTheme.displaySmall,
         ),
       ),
       body: Stack(children: [
@@ -58,9 +58,9 @@ class _SubmitPromptScreenState extends State<SubmitPromptScreen> {
                     maxLines: 10,
                     cursorColor: Colors.black,
                     cursorWidth: 2.0,
-                    style: AppTheme.getTheme().textTheme.bodyText1,
+                    style: AppTheme.getTheme().textTheme.bodyLarge,
                     decoration: InputDecoration(
-                      hintStyle: AppTheme.getTheme().textTheme.bodyText1,
+                      hintStyle: AppTheme.getTheme().textTheme.bodyLarge,
                       hintText: 'Enter your prompt here...',
                       contentPadding: const EdgeInsets.symmetric(
                         vertical: 20.0,
@@ -124,12 +124,12 @@ class _SubmitPromptScreenState extends State<SubmitPromptScreen> {
                         ],
                         borderRadius: BorderRadius.circular(17.0),
                         color: _isValid
-                            ? AppTheme.getTheme().backgroundColor
+                            ? AppTheme.getTheme().colorScheme.background
                             : AppTheme.getTheme().disabledColor),
                     child: Text(
                       "Submit",
                       textAlign: TextAlign.center,
-                      style: AppTheme.getTheme().textTheme.headline4,
+                      style: AppTheme.getTheme().textTheme.headlineMedium,
                     ),
                   ),
                 ),

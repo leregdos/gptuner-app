@@ -1,7 +1,6 @@
 import 'package:gptuner/models/answer.dart';
 import 'package:gptuner/models/prompt.dart';
 import 'package:gptuner/providers/document_state.dart';
-import 'package:http/http.dart';
 import 'package:mockito/mockito.dart';
 import 'package:gptuner/providers/auth_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';

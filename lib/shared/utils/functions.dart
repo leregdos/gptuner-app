@@ -87,10 +87,10 @@ void _showLogoutConfirmation(
       return AlertDialog(
         title: Center(
             child: Text('Log Out',
-                style: AppTheme.getTheme().textTheme.headline3)),
+                style: AppTheme.getTheme().textTheme.displaySmall)),
         content: Text('Are you sure you want to log out?',
             textAlign: TextAlign.center,
-            style: AppTheme.getTheme().textTheme.subtitle1),
+            style: AppTheme.getTheme().textTheme.titleMedium),
         actions: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -101,7 +101,7 @@ void _showLogoutConfirmation(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text('Yes',
-                        style: AppTheme.getTheme().textTheme.bodyText2),
+                        style: AppTheme.getTheme().textTheme.bodyMedium),
                   ),
                   onPressed: () {
                     documentState.reset();
@@ -122,7 +122,7 @@ void _showLogoutConfirmation(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text('No',
-                        style: AppTheme.getTheme().textTheme.bodyText2),
+                        style: AppTheme.getTheme().textTheme.bodyMedium),
                   ),
                   onPressed: () {
                     Navigator.of(context).pop(); // Close the dialog
@@ -154,28 +154,30 @@ Widget buildSidebar(
             child: Center(
               child: Text(
                 'Menu',
-                style: AppTheme.getTheme().textTheme.headline5,
+                style: AppTheme.getTheme().textTheme.headlineSmall,
               ),
             ),
           ),
           ListTile(
             leading: const Icon(Icons.account_circle, color: Colors.white),
-            title: Text('Profile', style: AppTheme.getTheme().textTheme.button),
+            title: Text('Profile',
+                style: AppTheme.getTheme().textTheme.labelLarge),
             onTap: () {
               Navigator.pushNamed(context, Routes.profileScreen);
             },
           ),
           ListTile(
             leading: const Icon(Icons.settings, color: Colors.white),
-            title:
-                Text('Settings', style: AppTheme.getTheme().textTheme.button),
+            title: Text('Settings',
+                style: AppTheme.getTheme().textTheme.labelLarge),
             onTap: () {
               Navigator.pushNamed(context, Routes.settingsScreen);
             },
           ),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.white),
-            title: Text('Log Out', style: AppTheme.getTheme().textTheme.button),
+            title: Text('Log Out',
+                style: AppTheme.getTheme().textTheme.labelLarge),
             onTap: () {
               _showLogoutConfirmation(context, state, documentState);
             },
@@ -238,9 +240,9 @@ PageRouteBuilder customPageRoute(Widget page) {
 void showSnackbarOnServerExceptions(int statusCode) {
   if (statusCode == 401) {
     showSnackbar("Authentication error. Please log out and log in again.",
-        backgroundColor: AppTheme.getTheme().errorColor);
+        backgroundColor: AppTheme.getTheme().colorScheme.error);
   } else {
     showSnackbar("There has been a server error. Please try again later.",
-        backgroundColor: AppTheme.getTheme().errorColor);
+        backgroundColor: AppTheme.getTheme().colorScheme.error);
   }
 }

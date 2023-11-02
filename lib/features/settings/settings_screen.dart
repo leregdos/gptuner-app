@@ -13,7 +13,7 @@ class SettingsScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF8AA1A9),
         title: Text(
           'Settings',
-          style: AppTheme.getTheme().textTheme.headline1,
+          style: AppTheme.getTheme().textTheme.displayLarge,
         ),
       ),
       body: Padding(
@@ -26,7 +26,7 @@ class SettingsScreen extends StatelessWidget {
                   ListTile(
                     title: Text(
                       'Update Password',
-                      style: AppTheme.getTheme().textTheme.button,
+                      style: AppTheme.getTheme().textTheme.labelLarge,
                       textAlign: TextAlign.left,
                     ),
                     trailing: const Icon(

@@ -53,18 +53,18 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
           return AlertDialog(
             title: Text(title,
                 textAlign: TextAlign.center,
-                style: AppTheme.getTheme().textTheme.headline3),
+                style: AppTheme.getTheme().textTheme.displaySmall),
             actions: [
               TextButton(
                 child:
-                    Text('No', style: AppTheme.getTheme().textTheme.bodyText2),
+                    Text('No', style: AppTheme.getTheme().textTheme.bodyMedium),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               TextButton(
-                child:
-                    Text('Yes', style: AppTheme.getTheme().textTheme.bodyText2),
+                child: Text('Yes',
+                    style: AppTheme.getTheme().textTheme.bodyMedium),
                 onPressed: () {
                   callback();
                   Navigator.of(context).pop();
@@ -81,18 +81,18 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
             return CupertinoAlertDialog(
               title: Text(title,
                   textAlign: TextAlign.center,
-                  style: AppTheme.getTheme().textTheme.headline3),
+                  style: AppTheme.getTheme().textTheme.displaySmall),
               actions: [
                 CupertinoDialogAction(
                   child: Text('No',
-                      style: AppTheme.getTheme().textTheme.bodyText2),
+                      style: AppTheme.getTheme().textTheme.bodyMedium),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
                 CupertinoDialogAction(
                   child: Text('Yes',
-                      style: AppTheme.getTheme().textTheme.bodyText2),
+                      style: AppTheme.getTheme().textTheme.bodyMedium),
                   onPressed: () {
                     callback(context);
                     Navigator.of(context).pop();
@@ -120,7 +120,7 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
               child: Text(
                 "There are no prompts to answer at this time. Please check back later.",
                 textAlign: TextAlign.center,
-                style: AppTheme.getTheme().textTheme.subtitle1,
+                style: AppTheme.getTheme().textTheme.titleMedium,
               ),
             ),
           ),
@@ -152,12 +152,12 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
                             borderRadius: BorderRadius.circular(20),
                             color: (index.isEven)
                                 ? Colors.grey.shade200
-                                : AppTheme.getTheme().backgroundColor,
+                                : AppTheme.getTheme().colorScheme.background,
                           ),
                           padding: const EdgeInsets.all(16),
                           child: Text(
                             messages[index],
-                            style: AppTheme.getTheme().textTheme.bodyText1,
+                            style: AppTheme.getTheme().textTheme.bodyLarge,
                           ),
                         ),
                       ),
@@ -194,7 +194,7 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
                       _alertDialog("Are you sure you want to skip this prompt?",
                           _skipPrompt);
                     },
-                    backgroundColor: AppTheme.getTheme().backgroundColor,
+                    backgroundColor: AppTheme.getTheme().colorScheme.background,
                     elevation: 0,
                     child: const Icon(
                       FontAwesomeIcons.forwardStep,
@@ -214,7 +214,7 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
                             _sendMessage);
                       }
                     },
-                    backgroundColor: AppTheme.getTheme().backgroundColor,
+                    backgroundColor: AppTheme.getTheme().colorScheme.background,
                     elevation: 0,
                     child: const Icon(
                       FontAwesomeIcons.paperPlane,
@@ -238,10 +238,10 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
     return Scaffold(
       backgroundColor: AppTheme.getTheme().primaryColor,
       appBar: AppBar(
-        backgroundColor: AppTheme.getTheme().backgroundColor,
+        backgroundColor: AppTheme.getTheme().colorScheme.background,
         title: Text(
           'Demonstration Submission',
-          style: AppTheme.getTheme().textTheme.headline3,
+          style: AppTheme.getTheme().textTheme.displaySmall,
         ),
       ),
       body: state.token != null
@@ -264,7 +264,7 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
                   return Center(
                     child: Text(
                       'There has been an error, please try again.',
-                      style: AppTheme.getTheme().textTheme.subtitle1,
+                      style: AppTheme.getTheme().textTheme.titleMedium,
                     ),
                   );
                 } else {

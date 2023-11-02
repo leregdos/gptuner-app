@@ -39,7 +39,7 @@ class _SignupScreenState extends State<SignupScreen> {
         return true;
       },
       child: Scaffold(
-        backgroundColor: AppTheme.getTheme().backgroundColor,
+        backgroundColor: AppTheme.getTheme().colorScheme.background,
         body: Stack(
           children: [
             Center(
@@ -63,7 +63,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             // const SizedBox(height: 50.0),
                             Text(
                               "Sign Up",
-                              style: AppTheme.getTheme().textTheme.headline3,
+                              style: AppTheme.getTheme().textTheme.displaySmall,
                             ),
                             const SizedBox(height: 50.0),
                             TextFormField(
@@ -105,7 +105,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                       200], // This gives it a gray background
                                 ),
                                 keyboardType: TextInputType.name,
-                                style: AppTheme.getTheme().textTheme.subtitle2),
+                                style:
+                                    AppTheme.getTheme().textTheme.titleSmall),
                             const SizedBox(height: 16.0),
                             TextFormField(
                                 key: const Key("emailFieldSignup"),
@@ -141,7 +142,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                       200], // This gives it a gray background
                                 ),
                                 keyboardType: TextInputType.emailAddress,
-                                style: AppTheme.getTheme().textTheme.subtitle2),
+                                style:
+                                    AppTheme.getTheme().textTheme.titleSmall),
                             const SizedBox(height: 16.0),
                             TextFormField(
                                 key: const Key("passwordFieldSignup"),
@@ -177,7 +179,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                   fillColor: Colors.grey[
                                       200], // This gives it a gray background
                                 ),
-                                style: AppTheme.getTheme().textTheme.subtitle2),
+                                style:
+                                    AppTheme.getTheme().textTheme.titleSmall),
                             const SizedBox(height: 16.0),
                             TextFormField(
                                 key: const Key("passwordConfirmFieldSignup"),
@@ -218,7 +221,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                   fillColor: Colors.grey[
                                       200], // This gives it a gray background
                                 ),
-                                style: AppTheme.getTheme().textTheme.subtitle2),
+                                style:
+                                    AppTheme.getTheme().textTheme.titleSmall),
                             const SizedBox(height: 22.0),
                             InkWell(
                               key: const Key("signupButton"),
@@ -259,13 +263,16 @@ class _SignupScreenState extends State<SignupScreen> {
                                     ],
                                     borderRadius: BorderRadius.circular(17.0),
                                     color: _isValidForm
-                                        ? AppTheme.getTheme().backgroundColor
+                                        ? AppTheme.getTheme()
+                                            .colorScheme
+                                            .background
                                         : AppTheme.getTheme().disabledColor),
                                 child: Center(
                                   child: Text(
                                     "Create Account",
-                                    style:
-                                        AppTheme.getTheme().textTheme.headline4,
+                                    style: AppTheme.getTheme()
+                                        .textTheme
+                                        .headlineMedium,
                                   ),
                                 ),
                               ),
@@ -280,7 +287,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 child: Text(
                                   "Back to Sign In",
                                   style:
-                                      AppTheme.getTheme().textTheme.bodyText2,
+                                      AppTheme.getTheme().textTheme.bodyMedium,
                                 ),
                               ),
                             ),

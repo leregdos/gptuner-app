@@ -96,14 +96,14 @@ class AuthState with ChangeNotifier {
         String message = jsonDecode(response.body)["message"];
         if (message.substring(0, 6) == "E11000") {
           showSnackbar("Email already exists. Please try again.",
-              backgroundColor: AppTheme.getTheme().errorColor);
+              backgroundColor: AppTheme.getTheme().colorScheme.error);
         } else {
           showSnackbar("There has been a server error. Please try again later.",
-              backgroundColor: AppTheme.getTheme().errorColor);
+              backgroundColor: AppTheme.getTheme().colorScheme.error);
         }
       } else {
         showSnackbar("There has been a server error. Please try again later.",
-            backgroundColor: AppTheme.getTheme().errorColor);
+            backgroundColor: AppTheme.getTheme().colorScheme.error);
       }
     }
   }
@@ -128,10 +128,10 @@ class AuthState with ChangeNotifier {
       notifyListeners();
     } else if (response.statusCode == 401) {
       showSnackbar("Incorrect email or password.",
-          backgroundColor: AppTheme.getTheme().errorColor);
+          backgroundColor: AppTheme.getTheme().colorScheme.error);
     } else {
       showSnackbar("There has been a server error. Please try again later.",
-          backgroundColor: AppTheme.getTheme().errorColor);
+          backgroundColor: AppTheme.getTheme().colorScheme.error);
     }
   }
 
@@ -184,16 +184,16 @@ class AuthState with ChangeNotifier {
         return true;
       } else {
         showSnackbar("There has been a server error. Please try again later.",
-            backgroundColor: AppTheme.getTheme().errorColor);
+            backgroundColor: AppTheme.getTheme().colorScheme.error);
         return false;
       }
     } else if (response.statusCode == 401) {
       showSnackbar("Incorrect Password. Please try again.",
-          backgroundColor: AppTheme.getTheme().errorColor);
+          backgroundColor: AppTheme.getTheme().colorScheme.error);
       return false;
     } else {
       showSnackbar("There has been a server error. Please try again later.",
-          backgroundColor: AppTheme.getTheme().errorColor);
+          backgroundColor: AppTheme.getTheme().colorScheme.error);
       return false;
     }
   }

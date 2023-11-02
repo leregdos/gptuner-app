@@ -77,7 +77,7 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
   @override
   Widget build(BuildContext context) {
     final documentState = Provider.of<DocumentState>(context, listen: true);
-    Widget _buildLoader() {
+    Widget buildLoader() {
       return Center(
         child: Container(
           color: Colors.grey.withOpacity(0.7),
@@ -86,7 +86,7 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
       );
     }
 
-    Widget _buildNoAvailableDataMessage(String message) {
+    Widget buildNoAvailableDataMessage(String message) {
       return Center(
         child: Card(
           color: Colors.grey.shade400,
@@ -101,7 +101,7 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
               child: Text(
                 message,
                 textAlign: TextAlign.center,
-                style: AppTheme.getTheme().textTheme.subtitle1,
+                style: AppTheme.getTheme().textTheme.titleMedium,
               ),
             ),
           ),
@@ -109,14 +109,14 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
       );
     }
 
-    Widget _buildPromptsTab() {
+    Widget buildPromptsTab() {
       if (documentState.noAvailablePromptForValidation) {
-        return _buildNoAvailableDataMessage(
+        return buildNoAvailableDataMessage(
             "There are no prompts to validate at this time. Please check back later.");
       }
 
       if (documentState.promptListForValidation.isEmpty) {
-        return _buildLoader();
+        return buildLoader();
       }
       return SingleChildScrollView(
           child: Column(
@@ -134,7 +134,7 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
                 padding: const EdgeInsets.all(32.0),
                 child: Text(
                   documentState.promptListForValidation.elementAt(0).content!,
-                  style: AppTheme.getTheme().textTheme.bodyText1,
+                  style: AppTheme.getTheme().textTheme.bodyLarge,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -144,14 +144,14 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
       ));
     }
 
-    Widget _buildDemonstrationsTab() {
+    Widget buildDemonstrationsTab() {
       if (documentState.noAvailableAnswerForValidation) {
-        return _buildNoAvailableDataMessage(
+        return buildNoAvailableDataMessage(
             "There are no demonstrations to validate at this time. Please check back later.");
       }
 
       if (documentState.answerPromptForValidation.isEmpty) {
-        return _buildLoader();
+        return buildLoader();
       }
       return SingleChildScrollView(
         child: Column(
@@ -172,7 +172,7 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
                     documentState.answerPromptForValidation.values
                         .elementAt(0)
                         .content!,
-                    style: AppTheme.getTheme().textTheme.bodyText1,
+                    style: AppTheme.getTheme().textTheme.bodyLarge,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -193,7 +193,7 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
                     documentState.answerPromptForValidation.keys
                         .elementAt(0)
                         .content!,
-                    style: AppTheme.getTheme().textTheme.bodyText1,
+                    style: AppTheme.getTheme().textTheme.bodyLarge,
                     textAlign: TextAlign.start,
                   ),
                 ),
@@ -207,10 +207,10 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
     return Scaffold(
       backgroundColor: AppTheme.getTheme().primaryColor,
       appBar: AppBar(
-        backgroundColor: AppTheme.getTheme().backgroundColor,
+        backgroundColor: AppTheme.getTheme().colorScheme.background,
         title: Text(
           'Validate Submissions',
-          style: AppTheme.getTheme().textTheme.headline3,
+          style: AppTheme.getTheme().textTheme.displaySmall,
         ),
         bottom: TabBar(
           onTap: (val) {
@@ -221,12 +221,12 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
             Tab(
                 child: Text(
               'Prompts',
-              style: AppTheme.getTheme().textTheme.subtitle1,
+              style: AppTheme.getTheme().textTheme.titleMedium,
             )),
             Tab(
                 child: Text(
               'Demonstrations',
-              style: AppTheme.getTheme().textTheme.subtitle1,
+              style: AppTheme.getTheme().textTheme.titleMedium,
             )),
           ],
         ),
@@ -237,8 +237,8 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
             child: TabBarView(
               controller: _controller,
               children: [
-                _buildPromptsTab(),
-                _buildDemonstrationsTab(),
+                buildPromptsTab(),
+                buildDemonstrationsTab(),
               ],
             ),
           ),
@@ -272,7 +272,7 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
                                   )
                                 ],
                                 borderRadius: BorderRadius.circular(17.0),
-                                color: AppTheme.getTheme().errorColor),
+                                color: AppTheme.getTheme().colorScheme.error),
                             child: Text(
                               "Invalid",
                               textAlign: TextAlign.center,

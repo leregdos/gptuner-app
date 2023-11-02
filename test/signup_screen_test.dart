@@ -100,7 +100,7 @@ void main() {
       ));
       final decoration = button.decoration as BoxDecoration;
       // Ensure the button is enabled
-      expect(decoration.color, AppTheme.getTheme().backgroundColor);
+      expect(decoration.color, AppTheme.getTheme().colorScheme.background);
     });
 
     testWidgets('calls signup method when form is submitted',

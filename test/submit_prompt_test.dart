@@ -4,7 +4,6 @@ import 'package:gptuner/features/submit_prompt/submit_prompt.dart';
 import 'package:gptuner/models/user.dart';
 import 'package:gptuner/providers/auth_state.dart';
 import 'package:gptuner/providers/document_state.dart';
-import 'package:gptuner/shared/widgets/custom_loader.dart';
 import 'package:gptuner/theme/app_theme.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
@@ -83,7 +82,7 @@ void main() {
         const Key("submitButtonContainer"),
       ));
       final decoration = submitButton.decoration as BoxDecoration;
-      expect(decoration.color, AppTheme.getTheme().backgroundColor);
+      expect(decoration.color, AppTheme.getTheme().colorScheme.background);
     });
 
     testWidgets(

@@ -38,7 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: const Color(0xFF8AA1A9),
         title: Text(
           'Profile',
-          style: AppTheme.getTheme().textTheme.headline1,
+          style: AppTheme.getTheme().textTheme.displayLarge,
         ),
       ),
       body: Stack(children: [
@@ -52,11 +52,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ListTile(
                       title: Text(
                         'Name',
-                        style: AppTheme.getTheme().textTheme.button,
+                        style: AppTheme.getTheme().textTheme.labelLarge,
                       ),
                       subtitle: Text(
                         _name,
-                        style: AppTheme.getTheme().textTheme.button,
+                        style: AppTheme.getTheme().textTheme.labelLarge,
                       ),
                       trailing: IconButton(
                         icon: const Icon(
@@ -76,11 +76,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ListTile(
                       title: Text(
                         'Email',
-                        style: AppTheme.getTheme().textTheme.button,
+                        style: AppTheme.getTheme().textTheme.labelLarge,
                       ),
                       subtitle: Text(
                         _email,
-                        style: AppTheme.getTheme().textTheme.button,
+                        style: AppTheme.getTheme().textTheme.labelLarge,
                       ),
                       trailing: IconButton(
                         icon: const Icon(Icons.edit, color: Colors.white),
@@ -105,11 +105,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onTap: () async {
                     if (!_validEmail) {
                       showSnackbar("Please enter a valid email address.",
-                          backgroundColor: AppTheme.getTheme().errorColor);
+                          backgroundColor:
+                              AppTheme.getTheme().colorScheme.error);
                     }
                     if (!_validName) {
                       showSnackbar("Please enter a valid name.",
-                          backgroundColor: AppTheme.getTheme().errorColor);
+                          backgroundColor:
+                              AppTheme.getTheme().colorScheme.error);
                     }
                     if (_validEmail && _validName) {
                       if (_name != state.user!.name ||
@@ -139,11 +141,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           )
                         ],
                         borderRadius: BorderRadius.circular(17.0),
-                        color: AppTheme.getTheme().backgroundColor),
+                        color: AppTheme.getTheme().colorScheme.background),
                     child: Center(
                       child: Text(
                         "Update Profile",
-                        style: AppTheme.getTheme().textTheme.headline4,
+                        style: AppTheme.getTheme().textTheme.headlineMedium,
                       ),
                     ),
                   ),

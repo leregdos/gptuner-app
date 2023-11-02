@@ -34,7 +34,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
         backgroundColor: const Color(0xFF8AA1A9),
         title: Text(
           'Update Password',
-          style: AppTheme.getTheme().textTheme.headline1,
+          style: AppTheme.getTheme().textTheme.bodyLarge,
         ),
       ),
       body: Stack(
@@ -87,7 +87,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                                   .grey[200], // This gives it a gray background
                             ),
                             obscureText: true,
-                            style: AppTheme.getTheme().textTheme.subtitle2),
+                            style: AppTheme.getTheme().textTheme.titleSmall),
                         const SizedBox(height: 16.0),
                         TextFormField(
                             validator: (val) {
@@ -129,7 +129,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                                   .grey[200], // This gives it a gray background
                             ),
                             obscureText: true,
-                            style: AppTheme.getTheme().textTheme.subtitle2),
+                            style: AppTheme.getTheme().textTheme.titleSmall),
                         const SizedBox(height: 16.0),
                         TextFormField(
                             validator: (val) {
@@ -169,7 +169,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                                   .grey[200], // This gives it a gray background
                             ),
                             obscureText: true,
-                            style: AppTheme.getTheme().textTheme.subtitle2),
+                            style: AppTheme.getTheme().textTheme.titleSmall),
                       ],
                     ),
                   ),
@@ -211,12 +211,12 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                             ],
                             borderRadius: BorderRadius.circular(17.0),
                             color: _isValidForm
-                                ? AppTheme.getTheme().backgroundColor
+                                ? AppTheme.getTheme().colorScheme.background
                                 : AppTheme.getTheme().disabledColor),
                         child: Center(
                           child: Text(
                             "Change Password",
-                            style: AppTheme.getTheme().textTheme.headline4,
+                            style: AppTheme.getTheme().textTheme.headlineMedium,
                           ),
                         ),
                       ),
