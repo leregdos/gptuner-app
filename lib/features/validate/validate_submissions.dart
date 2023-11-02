@@ -115,7 +115,8 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
             "There are no prompts to validate at this time. Please check back later.");
       }
 
-      if (documentState.promptListForValidation.isEmpty) {
+      if (documentState.promptListForValidation.isEmpty &&
+          !documentState.noAvailablePromptForValidation) {
         return buildLoader();
       }
       return SingleChildScrollView(
