@@ -195,7 +195,7 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
                         .elementAt(0)
                         .content!,
                     style: AppTheme.getTheme().textTheme.bodyLarge,
-                    textAlign: TextAlign.start,
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
