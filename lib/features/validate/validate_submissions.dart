@@ -77,7 +77,6 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
   @override
   Widget build(BuildContext context) {
     final documentState = Provider.of<DocumentState>(context, listen: true);
-    final authState = Provider.of<AuthState>(context, listen: true);
     return Scaffold(
       backgroundColor: AppTheme.getTheme().primaryColor,
       appBar: AppBar(
@@ -132,19 +131,25 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
                           ),
                         ),
                       )
-                    : SingleChildScrollView(
-                        child: documentState.promptListForValidation.isEmpty
-                            ? Stack(
-                                children: [
-                                  Positioned.fill(
-                                    child: Container(
-                                        color: Colors.grey.withOpacity(0.7)),
+                    : LayoutBuilder(builder: (context, constraints) {
+                        return documentState.promptListForValidation.isEmpty &&
+                                !documentState.noAvailablePromptForValidation
+                            ? ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  minHeight: constraints.maxHeight,
+                                  minWidth: constraints.maxWidth,
+                                ),
+                                child: IntrinsicHeight(
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    color: Colors.grey.withOpacity(0.7),
+                                    child: const Center(child: CustomLoader()),
                                   ),
-                                  const Center(child: CustomLoader()),
-                                ],
+                                ),
                               )
-                            : Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                            : SingleChildScrollView(
+                                child: Column(
                                 children: [
                                   const SizedBox(height: 60),
                                   Card(
@@ -171,8 +176,8 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
                                     ),
                                   ),
                                 ],
-                              ),
-                      ),
+                              ));
+                      }),
                 documentState.noAvailableAnswerForValidation
                     ? Center(
                         child: Card(
@@ -194,73 +199,85 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
                           ),
                         ),
                       )
-                    : SingleChildScrollView(
-                        child: documentState.answerPromptForValidation.isEmpty
-                            ? Stack(
-                                children: [
-                                  Positioned.fill(
-                                    child: Container(
-                                        color: Colors.grey.withOpacity(0.7)),
+                    : LayoutBuilder(builder: (context, constraints) {
+                        return documentState
+                                    .answerPromptForValidation.isEmpty &&
+                                !documentState.noAvailableAnswerForValidation
+                            ? ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  minHeight: constraints.maxHeight,
+                                  minWidth: constraints.maxWidth,
+                                ),
+                                child: IntrinsicHeight(
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    color: Colors.grey.withOpacity(0.7),
+                                    child: const Center(child: CustomLoader()),
                                   ),
-                                  const Center(child: CustomLoader()),
-                                ],
+                                ),
                               )
-                            : Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const SizedBox(height: 20),
-                                  Card(
-                                    color: Colors.grey[200],
-                                    elevation: 10.0,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    child: SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.8,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(20.0),
-                                        child: Text(
-                                          documentState
-                                              .answerPromptForValidation.values
-                                              .elementAt(0)
-                                              .content!,
-                                          style: AppTheme.getTheme()
-                                              .textTheme
-                                              .bodyText1,
-                                          textAlign: TextAlign.center,
+                            : SingleChildScrollView(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(height: 20),
+                                    Card(
+                                      color: Colors.grey[200],
+                                      elevation: 10.0,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.8,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(20.0),
+                                          child: Text(
+                                            documentState
+                                                .answerPromptForValidation
+                                                .values
+                                                .elementAt(0)
+                                                .content!,
+                                            style: AppTheme.getTheme()
+                                                .textTheme
+                                                .bodyText1,
+                                            textAlign: TextAlign.center,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 30),
-                                  Card(
-                                    color: Colors.grey[200],
-                                    elevation: 10.0,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    child: SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.8,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Text(
-                                          documentState
-                                              .answerPromptForValidation.keys
-                                              .elementAt(0)
-                                              .content!,
-                                          style: AppTheme.getTheme()
-                                              .textTheme
-                                              .bodyText1,
-                                          textAlign: TextAlign.start,
+                                    const SizedBox(height: 30),
+                                    Card(
+                                      color: Colors.grey[200],
+                                      elevation: 10.0,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.8,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Text(
+                                            documentState
+                                                .answerPromptForValidation.keys
+                                                .elementAt(0)
+                                                .content!,
+                                            style: AppTheme.getTheme()
+                                                .textTheme
+                                                .bodyText1,
+                                            textAlign: TextAlign.start,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                      ),
+                                  ],
+                                ),
+                              );
+                      })
               ],
             ),
           ),
