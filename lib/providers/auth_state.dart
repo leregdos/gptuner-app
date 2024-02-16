@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthState with ChangeNotifier {
   String? _token;
+  String? _opt;
   DateTime? _expiryDate;
   User? user;
   String hostUrl = EnvConfig.instance.hostUrl;
@@ -68,7 +69,7 @@ class AuthState with ChangeNotifier {
     return false;
   }
 
-  Future<void> signup(String? email, String? password, String? name,
+  Future<bool> signup(String? email, String? password, String? name,
       String? passwordConfirm) async {
     Map<String, String> body = {
       'email': email!,
@@ -91,6 +92,7 @@ class AuthState with ChangeNotifier {
       showSnackbar("Account creation successful.",
           backgroundColor: Colors.green);
       notifyListeners();
+      return true;
     } else {
       if (jsonDecode(response.body)["message"] != null) {
         String message = jsonDecode(response.body)["message"];
@@ -105,6 +107,7 @@ class AuthState with ChangeNotifier {
         showSnackbar("There has been a server error. Please try again later.",
             backgroundColor: AppTheme.getTheme().colorScheme.error);
       }
+      return false;
     }
   }
 
@@ -132,6 +135,41 @@ class AuthState with ChangeNotifier {
     } else {
       showSnackbar("There has been a server error. Please try again later.",
           backgroundColor: AppTheme.getTheme().colorScheme.error);
+    }
+  }
+
+  Future<bool> requestOPT() async {
+    Map<String, String> body = {
+      'email': user!.email!,
+    };
+    final response = await sendRequest("api/v1/users/otpSend",
+        method: "POST", body: body, hostUrl: hostUrl);
+    if (response.statusCode == 201) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> validateOPT(String? inputOPT) async {
+    Map<String, String> body = {
+      'email': user!.email!,
+      'otp': inputOPT!,
+    };
+    final response = await sendRequest("api/v1/users/otpVerify",
+        method: "POST", body: body, hostUrl: hostUrl);
+    if (response.statusCode == 200) {
+      showSnackbar("Email verification successful.",
+          backgroundColor: Colors.green);
+      return true;
+    } else if (response.statusCode == 400) {
+      showSnackbar("The OPT is wrong or expired. Please try again.",
+          backgroundColor: AppTheme.getTheme().colorScheme.error);
+      return false;
+    } else {
+      showSnackbar("There has been a server error. Please try again.",
+          backgroundColor: AppTheme.getTheme().colorScheme.error);
+      return false;
     }
   }
 

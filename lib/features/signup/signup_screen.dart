@@ -228,24 +228,29 @@ class _SignupScreenState extends State<SignupScreen> {
                               key: const Key("signupButton"),
                               onTap: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  Navigator.pushNamed(
-                                      context, Routes.otpScreen);
-                                  // setState(() {
-                                  //   _isLoading = true;
-                                  // });
-                                  // await state.signup(
-                                  //     _emailController.text,
-                                  //     _passwordController.text,
-                                  //     _nameController.text,
-                                  //     _confirmPasswordController.text);
-                                  // setState(() {
-                                  //   _isLoading = false;
-                                  // });
-                                  // if (!mounted) return;
-                                  // if (state.isAuthenticated) {
-                                  //   Navigator.pushNamed(
-                                  //       context, Routes.homeScreen);
-                                  // }
+                                  setState(() {
+                                    _isLoading = true;
+                                  });
+                                  bool signupSuccessful = await state.signup(
+                                      _emailController.text,
+                                      _passwordController.text,
+                                      _nameController.text,
+                                      _confirmPasswordController.text);
+
+                                  bool otpCreationSuccessful = false;
+                                  if (signupSuccessful) {
+                                    otpCreationSuccessful =
+                                        await state.requestOPT();
+                                  }
+                                  setState(() {
+                                    _isLoading = false;
+                                  });
+                                  if (!mounted) return;
+                                  if (state.isAuthenticated &&
+                                      otpCreationSuccessful) {
+                                    Navigator.pushNamed(
+                                        context, Routes.otpScreen);
+                                  }
                                 }
                               },
                               child: Container(

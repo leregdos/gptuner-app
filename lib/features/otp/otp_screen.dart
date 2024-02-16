@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gptuner/theme/app_theme.dart';
 import 'package:gptuner/shared/utils/constants.dart';
+import 'package:provider/provider.dart';
+import 'package:gptuner/providers/auth_state.dart';
+
 import 'dart:async';
 
 class OtpScreen extends StatefulWidget {
@@ -57,6 +60,8 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final state = Provider.of<AuthState>(context, listen: false);
+
     // Use MediaQuery to get screen size
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -141,21 +146,17 @@ class _OtpScreenState extends State<OtpScreen> {
                 key: const Key("verifyButton"),
                 onTap: () async {
                   if (!_otp.contains("")) {
-                    // setState(() {
-                    //   _isLoading = true;
-                    // });
-                    // await state.signup(
-                    //     _emailController.text,
-                    //     _passwordController.text,
-                    //     _nameController.text,
-                    //     _confirmPasswordController.text);
-                    // setState(() {
-                    //   _isLoading = false;
-                    // });
-                    // if (!mounted) return;
-                    // if (state.isAuthenticated) {
-                    // Navigator.pushNamed(context, Routes.homeScreen);
-                    // }
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    bool validOPT = await state.validateOPT(_otp.join());
+                    setState(() {
+                      _isLoading = false;
+                    });
+                    if (!mounted) return;
+                    if (state.isAuthenticated && validOPT) {
+                      Navigator.pushNamed(context, Routes.homeScreen);
+                    }
                   }
                 },
                 child: Container(
