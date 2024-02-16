@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gptuner/theme/app_theme.dart';
 import 'package:gptuner/shared/utils/constants.dart';
+import 'dart:async';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({Key? key}) : super(key: key);
@@ -20,6 +21,39 @@ class _OtpScreenState extends State<OtpScreen> {
     ""
   ]; // Add this line to track OTP input
   bool _isLoading = false;
+  late Timer _timer; // Declare a Timer
+  Duration _duration =
+      Duration(minutes: 10); // Set the initial duration to 10 minutes
+  String _timeToDisplay = '10:00'; // A string to display the remaining time
+
+  @override
+  void initState() {
+    super.initState();
+    startTimer(); // Start the timer when the widget is initialized
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_duration.inSeconds <= 0) {
+          _timer.cancel();
+          Navigator.pop(context);
+        } else {
+          _duration = _duration - Duration(seconds: 1);
+          // Format the remaining time to display as mm:ss
+          _timeToDisplay =
+              '${_duration.inMinutes.remainder(60).toString().padLeft(2, '0')}:${(_duration.inSeconds.remainder(60)).toString().padLeft(2, '0')}';
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer
+        .cancel(); // Make sure to cancel the timer when the widget is disposed
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +96,14 @@ class _OtpScreenState extends State<OtpScreen> {
               Text(
                 "Enter the OTP code sent\n to your email address",
                 style: AppTheme.getTheme().textTheme.bodyLarge,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                "Time remaining: $_timeToDisplay",
+                style: AppTheme.getTheme().textTheme.headlineMedium,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
@@ -151,13 +193,17 @@ class _OtpScreenState extends State<OtpScreen> {
                 style: AppTheme.getTheme().textTheme.bodySmall,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(
-                height: 18,
-              ),
-              Text(
-                "Resend New Code",
-                style: AppTheme.getTheme().textTheme.labelMedium,
-                textAlign: TextAlign.center,
+              Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: InkWell(
+                  onTap: () {
+                    print("Here");
+                  },
+                  child: Text(
+                    "Resend Code",
+                    style: AppTheme.getTheme().textTheme.bodyMedium,
+                  ),
+                ),
               ),
             ],
           ),
