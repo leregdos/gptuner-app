@@ -94,9 +94,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const Expanded(child: SizedBox()),
               InkWell(
                 key: const Key("verifyButton"),
                 onTap: () async {
