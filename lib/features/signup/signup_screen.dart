@@ -228,22 +228,24 @@ class _SignupScreenState extends State<SignupScreen> {
                               key: const Key("signupButton"),
                               onTap: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  setState(() {
-                                    _isLoading = true;
-                                  });
-                                  await state.signup(
-                                      _emailController.text,
-                                      _passwordController.text,
-                                      _nameController.text,
-                                      _confirmPasswordController.text);
-                                  setState(() {
-                                    _isLoading = false;
-                                  });
-                                  if (!mounted) return;
-                                  if (state.isAuthenticated) {
-                                    Navigator.pushNamed(
-                                        context, Routes.homeScreen);
-                                  }
+                                  Navigator.pushNamed(
+                                      context, Routes.otpScreen);
+                                  // setState(() {
+                                  //   _isLoading = true;
+                                  // });
+                                  // await state.signup(
+                                  //     _emailController.text,
+                                  //     _passwordController.text,
+                                  //     _nameController.text,
+                                  //     _confirmPasswordController.text);
+                                  // setState(() {
+                                  //   _isLoading = false;
+                                  // });
+                                  // if (!mounted) return;
+                                  // if (state.isAuthenticated) {
+                                  //   Navigator.pushNamed(
+                                  //       context, Routes.homeScreen);
+                                  // }
                                 }
                               },
                               child: Container(
