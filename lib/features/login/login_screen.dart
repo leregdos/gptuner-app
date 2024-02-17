@@ -29,11 +29,23 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<AuthState>(context, listen: false)
-        .tryAutoLogin()
-        .then((isLoggedin) {
-      if (isLoggedin) {
+    Provider.of<AuthState>(context, listen: false).tryAutoLogin().then((res) {
+      if (res == 'successful') {
         Navigator.pushNamed(context, Routes.homeScreen);
+      } else if (res == 'verification') {
+        Provider.of<AuthState>(context, listen: false)
+            .requestOPT()
+            .then((optRequestSuccessful) {
+          if (optRequestSuccessful) {
+            showSnackbar("Please verify your updated email.",
+                backgroundColor: Colors.green);
+            Navigator.pushNamed(context, Routes.otpScreen);
+          } else {
+            showSnackbar(
+                "There has been a server error. Please try again later.",
+                backgroundColor: AppTheme.getTheme().colorScheme.error);
+          }
+        });
       }
     });
   }
@@ -184,14 +196,32 @@ class _LoginScreenState extends State<LoginScreen> {
                               setState(() {
                                 _isLoading = true;
                               });
-                              await state.login(_emailController.text,
+                              String res = await state.login(
+                                  _emailController.text,
                                   _passwordController.text);
-                              setState(() {
-                                _isLoading = false;
-                              });
                               if (!mounted) return;
-                              if (state.isAuthenticated) {
+                              if (state.isAuthenticated &&
+                                  res == 'successful') {
+                                setState(() {
+                                  _isLoading = false;
+                                });
                                 Navigator.pushNamed(context, Routes.homeScreen);
+                              } else if (res == 'verification') {
+                                bool requestOPTSuccessful =
+                                    await state.requestOPT();
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                                if (requestOPTSuccessful) {
+                                  showSnackbar(
+                                      "Please verify your updated email.",
+                                      backgroundColor: Colors.green);
+                                  if (!mounted) return;
+                                  Navigator.pushNamed(
+                                      context, Routes.otpScreen);
+                                } else {
+                                  showSnackbarOnServerExceptions(500);
+                                }
                               }
                             }
                           },

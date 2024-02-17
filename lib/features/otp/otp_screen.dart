@@ -3,6 +3,8 @@ import 'package:gptuner/theme/app_theme.dart';
 import 'package:gptuner/shared/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:gptuner/providers/auth_state.dart';
+import 'package:gptuner/shared/widgets/custom_loader.dart';
+import 'package:gptuner/shared/utils/functions.dart';
 
 import 'dart:async';
 
@@ -26,8 +28,8 @@ class _OtpScreenState extends State<OtpScreen> {
   bool _isLoading = false;
   late Timer _timer; // Declare a Timer
   Duration _duration =
-      Duration(minutes: 10); // Set the initial duration to 10 minutes
-  String _timeToDisplay = '10:00'; // A string to display the remaining time
+      const Duration(minutes: 1); // Set the initial duration to 10 minutes
+  String _timeToDisplay = '1:00'; // A string to display the remaining time
 
   @override
   void initState() {
@@ -36,13 +38,12 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   void startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (_duration.inSeconds <= 0) {
           _timer.cancel();
-          Navigator.pop(context);
         } else {
-          _duration = _duration - Duration(seconds: 1);
+          _duration = _duration - const Duration(seconds: 1);
           // Format the remaining time to display as mm:ss
           _timeToDisplay =
               '${_duration.inMinutes.remainder(60).toString().padLeft(2, '0')}:${(_duration.inSeconds.remainder(60)).toString().padLeft(2, '0')}';
@@ -70,145 +71,172 @@ class _OtpScreenState extends State<OtpScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color(0xfff7f6fb),
+      backgroundColor: AppTheme.getTheme().colorScheme.background,
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 24, horizontal: 32),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: const Icon(
-                    Icons.arrow_back,
-                    size: 32,
-                    color: Colors.black54,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              Text('Email Verification',
-                  style: AppTheme.getTheme().textTheme.displaySmall),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                "Enter the OTP code sent\n to your email address",
-                style: AppTheme.getTheme().textTheme.bodyLarge,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                "Time remaining: $_timeToDisplay",
-                style: AppTheme.getTheme().textTheme.headlineMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Form(
-                key: _formKey,
-                child: Card(
-                  color: AppTheme.getTheme().primaryColor,
-                  elevation: 8.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(32.0),
-                  ),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.all(20.0), // Adjust padding as needed
-                    child: Wrap(
-                      // Use Wrap instead of Row to prevent overflow
-                      spacing: 10, // Spacing between each OTP field
-                      alignment: WrapAlignment
-                          .center, // Center the OTP fields within the Wrap
-                      children: List.generate(
-                          6,
-                          (index) => _textFieldOTP(
-                              first: index == 0,
-                              last: index == 5,
-                              width: otpFieldWidth, // Use the calculated width
-                              index: index)),
+        child: Stack(children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 32),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Icon(
+                      Icons.arrow_back,
+                      size: 32,
+                      color: Colors.black54,
                     ),
                   ),
                 ),
-              ),
-              const Expanded(child: SizedBox()),
-              InkWell(
-                key: const Key("verifyButton"),
-                onTap: () async {
-                  if (!_otp.contains("")) {
-                    setState(() {
-                      _isLoading = true;
-                    });
-                    bool validOPT = await state.validateOPT(_otp.join());
-                    setState(() {
-                      _isLoading = false;
-                    });
-                    if (!mounted) return;
-                    if (state.isAuthenticated && validOPT) {
-                      Navigator.pushNamed(context, Routes.homeScreen);
+                const SizedBox(
+                  height: 18,
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                Text('Email Verification',
+                    style: AppTheme.getTheme().textTheme.displaySmall),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Enter the OTP code sent\n to your email address",
+                  style: AppTheme.getTheme().textTheme.bodyLarge,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Form(
+                  key: _formKey,
+                  child: Card(
+                    color: AppTheme.getTheme().primaryColor,
+                    elevation: 8.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(32.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(
+                          20.0), // Adjust padding as needed
+                      child: Wrap(
+                        // Use Wrap instead of Row to prevent overflow
+                        spacing: 10, // Spacing between each OTP field
+                        alignment: WrapAlignment
+                            .center, // Center the OTP fields within the Wrap
+                        children: List.generate(
+                            6,
+                            (index) => _textFieldOTP(
+                                first: index == 0,
+                                last: index == 5,
+                                width:
+                                    otpFieldWidth, // Use the calculated width
+                                index: index)),
+                      ),
+                    ),
+                  ),
+                ),
+                const Expanded(child: SizedBox()),
+                InkWell(
+                  key: const Key("verifyButton"),
+                  onTap: () async {
+                    if (!_otp.contains("")) {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      bool validOPT = await state.validateOPT(_otp.join());
+                      setState(() {
+                        _isLoading = false;
+                      });
+                      if (!mounted) return;
+                      if (state.isAuthenticated && validOPT) {
+                        Navigator.pushNamed(context, Routes.homeScreen);
+                      }
                     }
-                  }
-                },
-                child: Container(
-                  key: const Key("verifyButtonContainer"),
-                  constraints: const BoxConstraints(
-                      minWidth: 200, maxWidth: double.infinity),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 1.0, vertical: 18.0),
-                  decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 1,
-                          blurRadius: 3,
-                          offset: const Offset(0, 3),
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(17.0),
-                      color: !_otp.contains("")
-                          ? AppTheme.getTheme().colorScheme.background
-                          : AppTheme.getTheme().disabledColor),
-                  child: Center(
-                    child: Text(
-                      "Verify Email",
-                      style: AppTheme.getTheme().textTheme.headlineMedium,
+                  },
+                  child: Container(
+                    key: const Key("verifyButtonContainer"),
+                    constraints: const BoxConstraints(
+                        minWidth: 200, maxWidth: double.infinity),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 1.0, vertical: 18.0),
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                            offset: const Offset(0, 3),
+                          )
+                        ],
+                        borderRadius: BorderRadius.circular(17.0),
+                        color: !_otp.contains("")
+                            ? AppTheme.getTheme().colorScheme.primary
+                            : AppTheme.getTheme().disabledColor),
+                    child: Center(
+                      child: Text(
+                        "Verify Email",
+                        style: AppTheme.getTheme().textTheme.bodyLarge,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              Text(
-                "Didn't receive any code?",
-                style: AppTheme.getTheme().textTheme.bodySmall,
-                textAlign: TextAlign.center,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: InkWell(
-                  onTap: () {
-                    print("Here");
-                  },
-                  child: Text(
-                    "Resend Code",
-                    style: AppTheme.getTheme().textTheme.bodyMedium,
+                const SizedBox(
+                  height: 18,
+                ),
+                Text(
+                  "Didn't receive any code?",
+                  style: AppTheme.getTheme().textTheme.bodySmall,
+                  textAlign: TextAlign.center,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: InkWell(
+                    onTap: () async {
+                      if (_duration.inSeconds <= 0) {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        bool optRequestSuccessful = await state.requestOPT();
+                        setState(() {
+                          _isLoading = false;
+                        });
+                        if (!mounted) return;
+                        if (optRequestSuccessful) {
+                          showSnackbar("OTP resent to your email.",
+                              backgroundColor: Colors.green);
+                          _duration = const Duration(minutes: 1);
+                          _timeToDisplay = '1:00';
+                          startTimer();
+                        } else {
+                          showSnackbar(
+                              "There has been a server error. Please try again later.",
+                              backgroundColor:
+                                  AppTheme.getTheme().colorScheme.error);
+                        }
+                      }
+                    },
+                    child: Text(
+                      _duration.inSeconds <= 0
+                          ? "Resend Code"
+                          : "Resend Code in $_timeToDisplay",
+                      style: AppTheme.getTheme().textTheme.titleMedium,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+          Visibility(
+            visible: _isLoading,
+            child: Positioned.fill(
+              child: Container(color: Colors.grey.withOpacity(0.7)),
+            ),
+          ),
+          Center(
+              child:
+                  Visibility(visible: _isLoading, child: const CustomLoader())),
+        ]),
       ),
     );
   }

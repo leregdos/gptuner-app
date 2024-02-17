@@ -8,7 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthState with ChangeNotifier {
   String? _token;
-  String? _opt;
   DateTime? _expiryDate;
   User? user;
   String hostUrl = EnvConfig.instance.hostUrl;
@@ -39,17 +38,17 @@ class AuthState with ChangeNotifier {
     await prefs.remove('expiryDate');
   }
 
-  Future<bool> tryAutoLogin() async {
+  Future<String> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('jwtToken') || !prefs.containsKey('expiryDate')) {
-      return false;
+      return 'unsuccessful';
     }
 
     final token = prefs.getString('jwtToken')!;
     final expiryDate = DateTime.parse(prefs.getString('expiryDate')!);
 
     if (expiryDate.isBefore(DateTime.now())) {
-      return false;
+      return 'unsuccessful';
     }
 
     final response = await sendRequest("api/v1/users/getCurrentUser",
@@ -60,13 +59,16 @@ class AuthState with ChangeNotifier {
       _expiryDate = expiryDate;
       if (jsonDecode(response.body)["user"] != null) {
         user = User.fromJson(jsonDecode(response.body)['user']);
+        if (!user!.emailVerified!) {
+          return 'verification';
+        }
       }
-      return true;
+      return 'successful';
     } else {
       showSnackbarOnServerExceptions(response.statusCode);
     }
     notifyListeners();
-    return false;
+    return 'unsuccessful';
   }
 
   Future<bool> signup(String? email, String? password, String? name,
@@ -111,7 +113,7 @@ class AuthState with ChangeNotifier {
     }
   }
 
-  Future<void> login(String? email, String? password) async {
+  Future<String> login(String? email, String? password) async {
     Map<String, String> body = {
       'email': email!,
       'password': password!,
@@ -127,8 +129,12 @@ class AuthState with ChangeNotifier {
       }
       if (jsonDecode(response.body)["user"] != null) {
         user = User.fromJson(jsonDecode(response.body)['user']);
+        if (!user!.emailVerified!) {
+          return 'verification';
+        }
       }
       notifyListeners();
+      return 'successful';
     } else if (response.statusCode == 401) {
       showSnackbar("Incorrect email or password.",
           backgroundColor: AppTheme.getTheme().colorScheme.error);
@@ -136,6 +142,7 @@ class AuthState with ChangeNotifier {
       showSnackbar("There has been a server error. Please try again later.",
           backgroundColor: AppTheme.getTheme().colorScheme.error);
     }
+    return 'unsuccessful';
   }
 
   Future<bool> requestOPT() async {
