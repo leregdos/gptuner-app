@@ -231,18 +231,25 @@ class _SignupScreenState extends State<SignupScreen> {
                                   setState(() {
                                     _isLoading = true;
                                   });
-                                  await state.signup(
+                                  bool signupSuccessful = await state.signup(
                                       _emailController.text,
                                       _passwordController.text,
                                       _nameController.text,
                                       _confirmPasswordController.text);
+
+                                  bool otpCreationSuccessful = false;
+                                  if (signupSuccessful) {
+                                    otpCreationSuccessful =
+                                        await state.requestOPT();
+                                  }
                                   setState(() {
                                     _isLoading = false;
                                   });
                                   if (!mounted) return;
-                                  if (state.isAuthenticated) {
+                                  if (state.isAuthenticated &&
+                                      otpCreationSuccessful) {
                                     Navigator.pushNamed(
-                                        context, Routes.homeScreen);
+                                        context, Routes.otpScreen);
                                   }
                                 }
                               },

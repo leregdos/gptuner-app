@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gptuner/features/home/home_screen.dart';
 import 'package:gptuner/features/login/login_screen.dart';
+import 'package:gptuner/features/otp/otp_screen.dart';
 import 'package:gptuner/features/profile/profile_screen.dart';
 import 'package:gptuner/features/settings/settings_screen.dart';
 import 'package:gptuner/features/signup/signup_screen.dart';
@@ -59,4 +60,5 @@ var routes = <String, WidgetBuilder>{
       const SubmitDemonstrationScreen(),
   Routes.validateSubmissionsScreen: (context) =>
       const ValidateSubmissionsScreen(),
+  Routes.otpScreen: (context) => const OtpScreen(),
 };

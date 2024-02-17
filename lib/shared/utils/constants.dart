@@ -10,4 +10,5 @@ class Routes {
       "/submit-demonstration-screen";
   static const String validateSubmissionsScreen =
       "/validate-submissions-screen";
+  static const String otpScreen = "/otp-screen";
 }

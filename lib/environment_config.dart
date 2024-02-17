@@ -10,7 +10,7 @@ class EnvConfig {
     switch (backendEnvironment) {
       case 'development':
         {
-          hostUrl = "https://gptuner-db624d447bc6.herokuapp.com/";
+          hostUrl = "http://127.0.0.1:3000/";
         }
         break;
 

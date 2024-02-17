@@ -38,17 +38,17 @@ class AuthState with ChangeNotifier {
     await prefs.remove('expiryDate');
   }
 
-  Future<bool> tryAutoLogin() async {
+  Future<String> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('jwtToken') || !prefs.containsKey('expiryDate')) {
-      return false;
+      return 'unsuccessful';
     }
 
     final token = prefs.getString('jwtToken')!;
     final expiryDate = DateTime.parse(prefs.getString('expiryDate')!);
 
     if (expiryDate.isBefore(DateTime.now())) {
-      return false;
+      return 'unsuccessful';
     }
 
     final response = await sendRequest("api/v1/users/getCurrentUser",
@@ -59,16 +59,19 @@ class AuthState with ChangeNotifier {
       _expiryDate = expiryDate;
       if (jsonDecode(response.body)["user"] != null) {
         user = User.fromJson(jsonDecode(response.body)['user']);
+        if (!user!.emailVerified!) {
+          return 'verification';
+        }
       }
-      return true;
+      return 'successful';
     } else {
       showSnackbarOnServerExceptions(response.statusCode);
     }
     notifyListeners();
-    return false;
+    return 'unsuccessful';
   }
 
-  Future<void> signup(String? email, String? password, String? name,
+  Future<bool> signup(String? email, String? password, String? name,
       String? passwordConfirm) async {
     Map<String, String> body = {
       'email': email!,
@@ -91,6 +94,7 @@ class AuthState with ChangeNotifier {
       showSnackbar("Account creation successful.",
           backgroundColor: Colors.green);
       notifyListeners();
+      return true;
     } else {
       if (jsonDecode(response.body)["message"] != null) {
         String message = jsonDecode(response.body)["message"];
@@ -105,10 +109,11 @@ class AuthState with ChangeNotifier {
         showSnackbar("There has been a server error. Please try again later.",
             backgroundColor: AppTheme.getTheme().colorScheme.error);
       }
+      return false;
     }
   }
 
-  Future<void> login(String? email, String? password) async {
+  Future<String> login(String? email, String? password) async {
     Map<String, String> body = {
       'email': email!,
       'password': password!,
@@ -124,14 +129,54 @@ class AuthState with ChangeNotifier {
       }
       if (jsonDecode(response.body)["user"] != null) {
         user = User.fromJson(jsonDecode(response.body)['user']);
+        if (!user!.emailVerified!) {
+          return 'verification';
+        }
       }
       notifyListeners();
+      return 'successful';
     } else if (response.statusCode == 401) {
       showSnackbar("Incorrect email or password.",
           backgroundColor: AppTheme.getTheme().colorScheme.error);
     } else {
       showSnackbar("There has been a server error. Please try again later.",
           backgroundColor: AppTheme.getTheme().colorScheme.error);
+    }
+    return 'unsuccessful';
+  }
+
+  Future<bool> requestOPT() async {
+    Map<String, String> body = {
+      'email': user!.email!,
+    };
+    final response = await sendRequest("api/v1/users/otpSend",
+        method: "POST", body: body, hostUrl: hostUrl);
+    if (response.statusCode == 201) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> validateOPT(String? inputOPT) async {
+    Map<String, String> body = {
+      'email': user!.email!,
+      'otp': inputOPT!,
+    };
+    final response = await sendRequest("api/v1/users/otpVerify",
+        method: "POST", body: body, hostUrl: hostUrl);
+    if (response.statusCode == 200) {
+      showSnackbar("Email verification successful.",
+          backgroundColor: Colors.green);
+      return true;
+    } else if (response.statusCode == 400) {
+      showSnackbar("The OPT is wrong or expired. Please try again.",
+          backgroundColor: AppTheme.getTheme().colorScheme.error);
+      return false;
+    } else {
+      showSnackbar("There has been a server error. Please try again.",
+          backgroundColor: AppTheme.getTheme().colorScheme.error);
+      return false;
     }
   }
 
