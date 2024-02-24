@@ -77,7 +77,7 @@ class DocumentState with ChangeNotifier {
     }
   }
 
-  Future submitAnswer(String token, String userId, String content) async {
+  Future<bool> submitAnswer(String token, String userId, String content) async {
     if (promptListForAnswering.isNotEmpty) {
       Map<String, String> body = {
         "content": content,
@@ -93,10 +93,13 @@ class DocumentState with ChangeNotifier {
       if (response.statusCode == 201) {
         showSnackbar("Demonstration submitted successfully.",
             backgroundColor: Colors.green);
+        return true;
       } else {
         showSnackbarOnServerExceptions(response.statusCode);
+        return false;
       }
     }
+    return false;
   }
 
   Future getPromptsForValidation(String? token) async {
@@ -148,7 +151,8 @@ class DocumentState with ChangeNotifier {
     }
   }
 
-  Future validateSubmission(String token, int validated, int index) async {
+  Future<bool> validateSubmission(
+      String token, int validated, int index) async {
     String id = index == 0
         ? promptListForValidation[0].uid!
         : answerPromptForValidation.keys.first.uid!;
@@ -181,8 +185,10 @@ class DocumentState with ChangeNotifier {
         }
       }
       notifyListeners();
+      return true;
     } else {
       showSnackbarOnServerExceptions(response.statusCode);
+      return false;
     }
   }
 

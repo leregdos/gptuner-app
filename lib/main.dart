@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gptuner/features/home/home_screen.dart';
+import 'package:gptuner/features/leaderboard/leaderboard_screen.dart';
 import 'package:gptuner/features/login/login_screen.dart';
 import 'package:gptuner/features/otp/otp_screen.dart';
 import 'package:gptuner/features/profile/profile_screen.dart';
@@ -11,6 +12,7 @@ import 'package:gptuner/features/update_password/update_password.dart';
 import 'package:gptuner/features/validate/validate_submissions.dart';
 import 'package:gptuner/providers/auth_state.dart';
 import 'package:gptuner/providers/document_state.dart';
+import 'package:gptuner/providers/leaderboard_state.dart';
 import 'package:gptuner/shared/utils/constants.dart';
 import 'package:gptuner/theme/app_theme.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +33,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AuthState()),
-        ChangeNotifierProvider(create: (context) => DocumentState())
+        ChangeNotifierProvider(create: (context) => DocumentState()),
+        ChangeNotifierProvider(create: (context) => LeaderboardState())
       ],
       child: MaterialApp(
         title: 'GPTuner',
@@ -61,4 +64,5 @@ var routes = <String, WidgetBuilder>{
   Routes.validateSubmissionsScreen: (context) =>
       const ValidateSubmissionsScreen(),
   Routes.otpScreen: (context) => const OtpScreen(),
+  Routes.leaderboardScreen: (context) => const LeaderboardScreen(),
 };

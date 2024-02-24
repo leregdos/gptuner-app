@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gptuner/providers/auth_state.dart';
+import 'package:gptuner/shared/utils/badge_display.dart';
 import 'package:gptuner/shared/utils/functions.dart';
 import 'package:gptuner/shared/widgets/custom_loader.dart';
 import 'package:gptuner/theme/app_theme.dart';
@@ -17,6 +18,9 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late String _name;
   late String _email;
+  late int? _submittedPrompts;
+  late int? _submittedAnswers;
+  late int? _validationsMade;
   bool _isLoading = false;
   bool _validEmail = true;
   bool _validName = true;
@@ -25,6 +29,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final state = Provider.of<AuthState>(context, listen: false);
     _name = state.user!.name!;
     _email = state.user!.email!;
+    _submittedPrompts = state.user!.promptSubmitted;
+    _submittedAnswers = state.user!.answerSubmitted;
+    _validationsMade = state.user!.validations;
     super.initState();
   }
 
@@ -94,10 +101,128 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           });
                         },
                       ),
-                    )
+                    ),
+                    ListTile(
+                      title: Text(
+                        'Submitted Prompts',
+                        style: AppTheme.getTheme().textTheme.labelLarge,
+                      ),
+                      trailing: Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: Text(
+                          _submittedPrompts.toString(),
+                          style: AppTheme.getTheme().textTheme.labelLarge,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      title: Text(
+                        'Submitted Demonstrations',
+                        style: AppTheme.getTheme().textTheme.labelLarge,
+                      ),
+                      trailing: Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: Text(
+                          _submittedAnswers.toString(),
+                          style: AppTheme.getTheme().textTheme.labelLarge,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      title: Text(
+                        'Validations Made',
+                        style: AppTheme.getTheme().textTheme.labelLarge,
+                      ),
+                      trailing: Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: Text(
+                          _validationsMade.toString(),
+                          style: AppTheme.getTheme().textTheme.labelLarge,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
+              if (_submittedPrompts! > 0 ||
+                  _submittedAnswers! > 0 ||
+                  _validationsMade! >
+                      0) // Check if the user has any submissions or validations
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text(
+                        'Badges Earned',
+                        style: AppTheme.getTheme().textTheme.labelLarge,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            // Badges for submitted prompts
+                            if (_submittedPrompts! >= 25)
+                              const BadgeDisplay(
+                                imagePath: 'assets/badges/legendaryPrompt.png',
+                                badgeName: 'Legendary Submitter',
+                              )
+                            else if (_submittedPrompts! >= 10)
+                              const BadgeDisplay(
+                                imagePath: 'assets/badges/adeptPrompt.png',
+                                badgeName: 'Adept Submitter',
+                              )
+                            else if (_submittedPrompts! >= 1)
+                              const BadgeDisplay(
+                                imagePath: 'assets/badges/novicePrompt.png',
+                                badgeName: 'Novice Submitter',
+                              ),
+
+                            // Badges for submitted answers
+                            if (_submittedAnswers! >= 25)
+                              const BadgeDisplay(
+                                imagePath:
+                                    'assets/badges/legendaryDemonstrator.png',
+                                badgeName: 'Legendary Demonstrator',
+                              )
+                            else if (_submittedAnswers! >= 10)
+                              const BadgeDisplay(
+                                imagePath:
+                                    'assets/badges/adeptDemonstrator.png',
+                                badgeName: 'Skilled Demonstrator',
+                              )
+                            else if (_submittedAnswers! >= 1)
+                              const BadgeDisplay(
+                                imagePath:
+                                    'assets/badges/noviceDemonstrator.png',
+                                badgeName: 'Brave Demonstrator',
+                              ),
+
+                            // Badges for validations made
+                            if (_validationsMade! >= 25)
+                              const BadgeDisplay(
+                                imagePath:
+                                    'assets/badges/legendaryValidator.png',
+                                badgeName: 'Legendary Validator',
+                              )
+                            else if (_validationsMade! >= 10)
+                              const BadgeDisplay(
+                                imagePath: 'assets/badges/adeptValidator.png',
+                                badgeName: 'Expert Validator',
+                              )
+                            else if (_validationsMade! >= 1)
+                              const BadgeDisplay(
+                                imagePath: 'assets/badges/noviceValidator.png',
+                                badgeName: 'Valiant Validator',
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               Padding(
                 padding: const EdgeInsets.only(
                     bottom: 20.0, left: 32.0, right: 32.0),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gptuner/providers/auth_state.dart';
 import 'package:gptuner/providers/document_state.dart';
+import 'package:gptuner/shared/utils/constants.dart';
 import 'package:gptuner/shared/widgets/custom_loader.dart';
 import 'package:gptuner/theme/app_theme.dart';
 import 'package:provider/provider.dart';
@@ -104,6 +105,7 @@ class _SubmitPromptScreenState extends State<SubmitPromptScreen> {
                       });
                       if (success) {
                         _textController.clear();
+                        state.incrementStats(StatType.prompt);
                       }
                     }
                   },

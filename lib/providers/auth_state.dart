@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gptuner/environment_config.dart';
 import 'package:gptuner/models/user.dart';
+import 'package:gptuner/shared/utils/constants.dart';
 import 'package:gptuner/shared/utils/functions.dart';
 import 'package:gptuner/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -63,6 +64,7 @@ class AuthState with ChangeNotifier {
           return 'verification';
         }
       }
+      await getStats();
       return 'successful';
     } else {
       showSnackbarOnServerExceptions(response.statusCode);
@@ -90,6 +92,9 @@ class AuthState with ChangeNotifier {
       }
       if (jsonDecode(response.body)["user"] != null) {
         user = User.fromJson(jsonDecode(response.body)['user']);
+        user!.answerSubmitted = 0;
+        user!.promptSubmitted = 0;
+        user!.validations = 0;
       }
       showSnackbar("Account creation successful.",
           backgroundColor: Colors.green);
@@ -133,6 +138,7 @@ class AuthState with ChangeNotifier {
           return 'verification';
         }
       }
+      await getStats();
       notifyListeners();
       return 'successful';
     } else if (response.statusCode == 401) {
@@ -243,10 +249,45 @@ class AuthState with ChangeNotifier {
     }
   }
 
+  Future<void> getStats() async {
+    final response = await sendRequest("api/v1/users/getStats",
+        method: "GET",
+        headersAlt: {"Authorization": "Bearer $_token"},
+        hostUrl: hostUrl);
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body)['data'];
+      user!.answerSubmitted = data['answers'];
+      user!.promptSubmitted = data['prompts'];
+      user!.validations = data['promptValidations'] + data['answerValidations'];
+    } else {
+      showSnackbar(
+          "There has been a server error in retrieving user stats. Please try restarting the app.",
+          backgroundColor: AppTheme.getTheme().colorScheme.error);
+    }
+  }
+
   Future<void> logout() async {
     _token = null;
     _expiryDate = null;
     await _removeTokenAndExpiryDate();
     notifyListeners();
+  }
+
+  void incrementStats(StatType type) {
+    if (user != null) {
+      switch (type) {
+        case StatType.demonstration:
+          user!.answerSubmitted = (user!.answerSubmitted ?? 0) + 1;
+          break;
+        case StatType.prompt:
+          user!.promptSubmitted = (user!.promptSubmitted ?? 0) + 1;
+          break;
+        case StatType.validation:
+          user!.validations = (user!.validations ?? 0) + 1;
+          break;
+        default:
+          break;
+      }
+    }
   }
 }
