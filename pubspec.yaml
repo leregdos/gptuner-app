@@ -31,6 +31,17 @@ flutter_icons:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/badges/noviceValidator.png
+    - assets/badges/adeptValidator.png
+    - assets/badges/legendaryValidator.png
+    - assets/badges/novicePrompt.png
+    - assets/badges/adeptPrompt.png
+    - assets/badges/legendaryPrompt.png
+    - assets/badges/noviceDemonstrator.png
+    - assets/badges/adeptDemonstrator.png
+    - assets/badges/legendaryDemonstrator.png
+
   fonts:
     - family: SourceSansPro
       fonts:
