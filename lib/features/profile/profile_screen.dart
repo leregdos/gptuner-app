@@ -17,6 +17,9 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late String _name;
   late String _email;
+  late int? _submittedPrompts;
+  late int? _submittedAnswers;
+  late int? _validationsMade;
   bool _isLoading = false;
   bool _validEmail = true;
   bool _validName = true;
@@ -25,6 +28,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final state = Provider.of<AuthState>(context, listen: false);
     _name = state.user!.name!;
     _email = state.user!.email!;
+    _submittedPrompts = state.user!.promptSubmitted;
+    _submittedAnswers = state.user!.answerSubmitted;
+    _validationsMade = state.user!.validations;
     super.initState();
   }
 
@@ -94,7 +100,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           });
                         },
                       ),
-                    )
+                    ),
+                    ListTile(
+                      title: Text(
+                        'Submitted Prompts',
+                        style: AppTheme.getTheme().textTheme.labelLarge,
+                      ),
+                      trailing: Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: Text(
+                          _submittedPrompts.toString(),
+                          style: AppTheme.getTheme().textTheme.labelLarge,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      title: Text(
+                        'Submitted Demonstrations',
+                        style: AppTheme.getTheme().textTheme.labelLarge,
+                      ),
+                      trailing: Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: Text(
+                          _submittedAnswers.toString(),
+                          style: AppTheme.getTheme().textTheme.labelLarge,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      title: Text(
+                        'Validations Made',
+                        style: AppTheme.getTheme().textTheme.labelLarge,
+                      ),
+                      trailing: Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: Text(
+                          _validationsMade.toString(),
+                          style: AppTheme.getTheme().textTheme.labelLarge,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

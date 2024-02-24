@@ -63,6 +63,7 @@ class AuthState with ChangeNotifier {
           return 'verification';
         }
       }
+      await getStats();
       return 'successful';
     } else {
       showSnackbarOnServerExceptions(response.statusCode);
@@ -90,6 +91,9 @@ class AuthState with ChangeNotifier {
       }
       if (jsonDecode(response.body)["user"] != null) {
         user = User.fromJson(jsonDecode(response.body)['user']);
+        user!.answerSubmitted = 0;
+        user!.promptSubmitted = 0;
+        user!.validations = 0;
       }
       showSnackbar("Account creation successful.",
           backgroundColor: Colors.green);
@@ -133,6 +137,7 @@ class AuthState with ChangeNotifier {
           return 'verification';
         }
       }
+      await getStats();
       notifyListeners();
       return 'successful';
     } else if (response.statusCode == 401) {
@@ -240,6 +245,23 @@ class AuthState with ChangeNotifier {
       showSnackbar("There has been a server error. Please try again later.",
           backgroundColor: AppTheme.getTheme().colorScheme.error);
       return false;
+    }
+  }
+
+  Future<void> getStats() async {
+    final response = await sendRequest("api/v1/users/getStats",
+        method: "GET",
+        headersAlt: {"Authorization": "Bearer $_token"},
+        hostUrl: hostUrl);
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body)['data'];
+      user!.answerSubmitted = data['answers'];
+      user!.promptSubmitted = data['prompts'];
+      user!.validations = data['promptValidations'] + data['answerValidations'];
+    } else {
+      showSnackbar(
+          "There has been a server error in retrieving user stats. Please try restarting the app.",
+          backgroundColor: AppTheme.getTheme().colorScheme.error);
     }
   }
 
