@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gptuner/environment_config.dart';
 import 'package:gptuner/models/user.dart';
+import 'package:gptuner/shared/utils/constants.dart';
 import 'package:gptuner/shared/utils/functions.dart';
 import 'package:gptuner/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -270,5 +271,23 @@ class AuthState with ChangeNotifier {
     _expiryDate = null;
     await _removeTokenAndExpiryDate();
     notifyListeners();
+  }
+
+  void incrementStats(StatType type) {
+    if (user != null) {
+      switch (type) {
+        case StatType.demonstration:
+          user!.answerSubmitted = (user!.answerSubmitted ?? 0) + 1;
+          break;
+        case StatType.prompt:
+          user!.promptSubmitted = (user!.promptSubmitted ?? 0) + 1;
+          break;
+        case StatType.validation:
+          user!.validations = (user!.validations ?? 0) + 1;
+          break;
+        default:
+          break;
+      }
+    }
   }
 }

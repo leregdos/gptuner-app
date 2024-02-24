@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gptuner/providers/auth_state.dart';
 import 'package:gptuner/providers/document_state.dart';
+import 'package:gptuner/shared/utils/constants.dart';
 import 'package:gptuner/shared/widgets/custom_loader.dart';
 import 'package:gptuner/theme/app_theme.dart';
 import 'package:provider/provider.dart';
@@ -33,8 +34,11 @@ class _SubmitDemonstrationScreenState extends State<SubmitDemonstrationScreen> {
           duration: const Duration(milliseconds: 500));
       messages.clear();
       _textController.clear();
-      await documentState.submitAnswer(
+      bool success = await documentState.submitAnswer(
           authState.token!, authState.user!.uid!, msg);
+      if (success) {
+        authState.incrementStats(StatType.demonstration);
+      }
     }
   }
 

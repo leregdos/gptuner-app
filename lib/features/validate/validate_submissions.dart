@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gptuner/providers/auth_state.dart';
 import 'package:gptuner/providers/document_state.dart';
+import 'package:gptuner/shared/utils/constants.dart';
 import 'package:gptuner/shared/widgets/custom_loader.dart';
 import 'package:gptuner/theme/app_theme.dart';
 import 'package:provider/provider.dart';
@@ -29,10 +30,12 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
       await Future.delayed(const Duration(milliseconds: 200)); // Small delay
       buttonController.reverse();
       if (!mounted) return;
-      String? token = Provider.of<AuthState>(context, listen: false).token;
+      final authState = Provider.of<AuthState>(context, listen: false);
+      String? token = authState.token;
       if (token != null) {
-        await Provider.of<DocumentState>(context, listen: false)
+        bool success = await Provider.of<DocumentState>(context, listen: false)
             .validateSubmission(token, validated, _controller.index);
+        if (success) authState.incrementStats(StatType.validation);
       }
     });
   }
