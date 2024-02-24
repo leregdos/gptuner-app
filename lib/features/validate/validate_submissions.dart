@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gptuner/providers/auth_state.dart';
 import 'package:gptuner/providers/document_state.dart';
 import 'package:gptuner/shared/utils/constants.dart';
+import 'package:gptuner/shared/utils/functions.dart';
 import 'package:gptuner/shared/widgets/custom_loader.dart';
 import 'package:gptuner/theme/app_theme.dart';
 import 'package:provider/provider.dart';
@@ -89,33 +90,11 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
       );
     }
 
-    Widget buildNoAvailableDataMessage(String message) {
-      return Center(
-        child: Card(
-          color: Colors.grey.shade400,
-          elevation: 10.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.8,
-            child: Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Text(
-                message,
-                textAlign: TextAlign.center,
-                style: AppTheme.getTheme().textTheme.titleMedium,
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-
     Widget buildPromptsTab() {
       if (documentState.noAvailablePromptForValidation) {
         return buildNoAvailableDataMessage(
-            "There are no prompts to validate at this time. Please check back later.");
+            "There are no prompts to validate at this time. Please check back later.",
+            context);
       }
 
       if (documentState.promptListForValidation.isEmpty &&
@@ -151,7 +130,8 @@ class _ValidateSubmissionsScreenState extends State<ValidateSubmissionsScreen>
     Widget buildDemonstrationsTab() {
       if (documentState.noAvailableAnswerForValidation) {
         return buildNoAvailableDataMessage(
-            "There are no demonstrations to validate at this time. Please check back later.");
+            "There are no demonstrations to validate at this time. Please check back later.",
+            context);
       }
 
       if (documentState.answerPromptForValidation.isEmpty) {

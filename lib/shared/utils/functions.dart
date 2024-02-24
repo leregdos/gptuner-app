@@ -167,6 +167,14 @@ Widget buildSidebar(
             },
           ),
           ListTile(
+            leading: const Icon(Icons.leaderboard, color: Colors.white),
+            title: Text('Leaderboard',
+                style: AppTheme.getTheme().textTheme.labelLarge),
+            onTap: () {
+              Navigator.pushNamed(context, Routes.leaderboardScreen);
+            },
+          ),
+          ListTile(
             leading: const Icon(Icons.settings, color: Colors.white),
             title: Text('Settings',
                 style: AppTheme.getTheme().textTheme.labelLarge),
@@ -245,4 +253,27 @@ void showSnackbarOnServerExceptions(int statusCode) {
     showSnackbar("There has been a server error. Please try again later.",
         backgroundColor: AppTheme.getTheme().colorScheme.error);
   }
+}
+
+Widget buildNoAvailableDataMessage(String message, BuildContext context) {
+  return Center(
+    child: Card(
+      color: Colors.grey.shade400,
+      elevation: 10.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.8,
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Text(
+            message,
+            textAlign: TextAlign.center,
+            style: AppTheme.getTheme().textTheme.titleMedium,
+          ),
+        ),
+      ),
+    ),
+  );
 }

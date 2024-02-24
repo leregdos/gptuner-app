@@ -11,6 +11,7 @@ class Routes {
   static const String validateSubmissionsScreen =
       "/validate-submissions-screen";
   static const String otpScreen = "/otp-screen";
+  static const String leaderboardScreen = "/leaderboard-screen";
 }
 
 enum StatType { demonstration, prompt, validation }
