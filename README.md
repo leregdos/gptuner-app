@@ -1,4 +1,10 @@
-# GPTuner – APP
+# GPTuner
+
+### Motivation
+
+The purpose of this app is to collect human feedback necessary to improve the reliability, accuracy, and harmlessness of fine-tuned Large Language Models (LLMs). The collected feedback is then fed into a pipeline that aggregates the data and calculates the scalar reward to improve the model further.
+
+### Description
 
 This whole project is a mobile application built on Flutter frontend and Express+Node.js backend with MongoDB database. This repository is the frontend code for the project.
 
