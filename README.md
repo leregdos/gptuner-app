@@ -1,8 +1,15 @@
 # GPTuner
+A mobile-based data collection system for Large Language Models (LLMs). Users could submit prompts, demonstrate an answer to a prompt, and validate answers from other users to a given prompt and earn trophies on the app. 
+
+<div style="display: flex; justify-content: center; align-items: flex-start;">
+    <img src="screenshot2.png" alt="Users can submit their own prompts" style="width: 30%; height: auto; margin: 5px;">
+    <img src="screenshot3.png" alt="Users can demonstrate an appropriate answer to a prompt" style="width: 30%; height: auto; margin: 5px;">
+    <img src="screenshot4.png" alt="Users can validate answers to a prompt" style="width: 30%; height: auto; margin: 5px;">
+</div>
 
 ### Motivation
 
-The purpose of this app is to collect human feedback necessary to improve the reliability, accuracy, and harmlessness of fine-tuned Large Language Models (LLMs). The collected feedback is then fed into a pipeline that aggregates the data and calculates the scalar reward to improve the model further.
+The purpose of this app is to collect human feedback necessary to improve the reliability, accuracy, and harmlessness of fine-tuned LLMs. The collected feedback is then fed into a pipeline that aggregates the data and calculates the scalar reward to improve the model further.
 
 ### Description
 
